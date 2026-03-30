@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valbrembana Web – Il portale della Valle Brembana</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --red: #c0392b; --dark: #111; --mid: #333; --light: #f4f4f4;
+      --white: #fff; --border: #ddd; --text: #1a1a1a; --muted: #666; --max: 1280px;
+    }
+    body { font-family: 'Open Sans', sans-serif; background: var(--light); color: var(--text); line-height: 1.5; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* HEADER */
+    .site-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 12px 24px; background: var(--dark);
+      border-bottom: 3px solid var(--red);
+    }
+    .site-header .banner-slot { flex: 1; max-width: 320px; }
+    .site-header .banner-slot img { width: 100%; height: 90px; object-fit: cover; border-radius: 4px; }
+    .site-header .logo-center { flex: 2; text-align: center; }
+    .site-header .logo-center img { max-height: 70px; margin: 0 auto 4px; }
+    .site-header .logo-center .site-title {
+      font-family: 'Roboto', sans-serif; font-size: 2rem; font-weight: 900;
+      letter-spacing: 2px; color: var(--white); text-transform: uppercase;
+    }
+    .site-header .logo-center .site-tagline { font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* TOPBAR */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(17,17,17,0.92); backdrop-filter: blur(8px);
+      border-bottom: 2px solid var(--red);
+    }
+    .topbar nav {
+      max-width: var(--max); margin: 0 auto;
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+    }
+    .topbar nav a {
+      display: block; color: #eee; font-size: 0.82rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px; padding: 13px 18px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .topbar nav a:hover, .topbar nav a.active { background: var(--red); color: var(--white); }
+
+    /* TICKER */
+    .ticker-wrap {
+      background: var(--red); color: var(--white); overflow: hidden;
+      white-space: nowrap; padding: 7px 0; display: flex; align-items: center;
+    }
+    .ticker-label {
+      background: var(--dark); color: var(--white); font-size: 0.72rem;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+      padding: 0 14px; height: 100%; display: flex; align-items: center; flex-shrink: 0;
+    }
+    .ticker-track { display: inline-flex; animation: ticker 40s linear infinite; }
+    .ticker-track span { padding: 0 2.5rem; font-size: 0.84rem; font-weight: 600; }
+    .ticker-track span::after { content: ' \25CF'; opacity: 0.5; }
+    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    /* PAGE WRAP */
+    .page-wrap { max-width: var(--max); margin: 0 auto; padding: 20px 16px; }
+    .vbw-section { margin-bottom: 28px; }
+
+    /* TG SECTION */
+    .tg-section { display: flex; gap: 12px; align-items: stretch; }
+    .tg-side { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+    .tg-side .side-card {
+      flex: 1; background: var(--white); border: 1px solid var(--border);
+      overflow: hidden; display: flex; flex-direction: column;
+    }
+    .tg-side .side-card img { width: 100%; flex: 1; min-height: 0; object-fit: cover; }
+    .tg-side .side-card h4 { font-size: 0.85rem; font-weight: 700; padding: 10px 12px; line-height: 1.35; }
+    .tg-side .side-card .cat {
+      font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+      color: var(--red); padding: 0 12px 8px; letter-spacing: 0.5px;
+    }
+    .tg-player { flex: 3.2; position: relative; background: #000; aspect-ratio: 16/9; }
+    .tg-player video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .tg-hud { position: absolute; inset: 0; pointer-events: none; }
+    .tg-badge {
+      position: absolute; top: 12px; left: 12px; background: var(--red); color: #fff;
+      font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; padding: 3px 10px; text-transform: uppercase;
+    }
+    .tg-edition {
+      position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7);
+      color: #fff; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; letter-spacing: 1px;
+    }
+    .tg-lower {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.85));
+      padding: 40px 16px 12px; transition: opacity 0.5s;
+    }
+    .tg-lower .tg-cat {
+      background: var(--red); color: #fff; font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; padding: 2px 8px;
+      display: inline-block; margin-bottom: 6px;
+    }
+    .tg-lower h3 { color: #fff; font-size: 1rem; font-weight: 700; line-height: 1.3; }
+
+    /* HORIZONTAL NEWS */
+    .h-news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .h-card {
+      background: var(--white); border: 1px solid var(--border);
+      display: flex; overflow: hidden;
+    }
+    .h-card img { width: 140px; flex-shrink: 0; object-fit: cover; }
+    .h-card-body { padding: 14px; display: flex; flex-direction: column; gap: 6px; }
+    .h-card-body .cat { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: var(--red); letter-spacing: 0.5px; }
+    .h-card-body h3 { font-size: 0.9rem; font-weight: 700; line-height: 1.35; }
+    .h-card-body p { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+    .h-card-body .date { font-size: 0.7rem; color: #999; margin-top: auto; }
+
+    /* YOUTUBE SECTION */
+    .yt-section { display: flex; gap: 12px; align-items: stretch; }
+    .yt-side {
+      flex: 1; background: var(--white); border: 1px solid var(--border);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .yt-side img { width: 100%; height: 180px; object-fit: cover; }
+    .yt-side-body { padding: 14px; flex: 1; }
+    .yt-side-body .cat { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+    .yt-side-body h3 { font-size: 0.9rem; font-weight: 700; line-height: 1.35; }
+    .yt-side-body p { font-size: 0.78rem; color: var(--muted); margin-top: 6px; }
+    .yt-gallery { flex: 2.5; }
+    .yt-main-video iframe { width: 100%; aspect-ratio: 16/9; display: block; border: none; }
+    .yt-thumbs { display: flex; gap: 6px; margin-top: 6px; }
+    .yt-thumb { flex: 1; cursor: pointer; position: relative; overflow: hidden; }
+    .yt-thumb img { width: 100%; height: 68px; object-fit: cover; transition: transform 0.3s; }
+    .yt-thumb:hover img { transform: scale(1.05); }
+    .yt-thumb-title {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.75); color: #fff; font-size: 0.6rem; padding: 3px 5px; line-height: 1.2;
+    }
+
+    /* SEPARATOR */
+    .vbw-sep { border: none; border-top: 1px solid var(--border); margin: 8px 0 28px; }
+
+    /* OVERLAY GRID */
+    .overlay-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .overlay-card { position: relative; aspect-ratio: 3/4; overflow: hidden; cursor: pointer; }
+    .overlay-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+    .overlay-card:hover img { transform: scale(1.06); }
+    .overlay-card .ov-body {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 40px 12px 12px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.88)); color: #fff;
+    }
+    .overlay-card .ov-cat { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #ff6b6b; margin-bottom: 4px; }
+    .overlay-card .ov-title { font-size: 0.85rem; font-weight: 700; line-height: 1.3; }
+
+    /* MIX ROW 5 */
+    .mix-row-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .mini-card { background: var(--white); border: 1px solid var(--border); overflow: hidden; cursor: pointer; transition: box-shadow 0.2s; }
+    .mini-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .mini-card img { width: 100%; height: 120px; object-fit: cover; }
+    .mini-card-body { padding: 10px 12px 12px; }
+    .mini-card-body .cat { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--red); letter-spacing: 0.5px; margin-bottom: 4px; }
+    .mini-card-body h4 { font-size: 0.82rem; font-weight: 700; line-height: 1.3; }
+
+    /* MIX ROW 3 */
+    .mix-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .med-card { background: var(--white); border: 1px solid var(--border); overflow: hidden; cursor: pointer; }
+    .med-card img { width: 100%; height: 180px; object-fit: cover; }
+    .med-card-body { padding: 14px; }
+    .med-card-body .cat { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+    .med-card-body h3 { font-size: 0.95rem; font-weight: 700; line-height: 1.35; }
+    .med-card-body p { font-size: 0.78rem; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+
+    /* SECTION TITLE */
+    .section-title {
+      display: flex; align-items: center; gap: 10px;
+      margin: 8px 0 14px; padding: 0;
+    }
+    .section-title .dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; flex-shrink: 0; }
+    .section-title h2 {
+      font-family: 'Roboto', sans-serif; font-size: 0.82rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; color: var(--text);
+    }
+    .section-title .line { flex: 1; height: 1px; background: var(--border); }
+
+    /* SIDEBAR BANNER */
+    .page-with-sidebars { display: flex; gap: 0; max-width: calc(var(--max) + 320px); margin: 0 auto; align-items: stretch; }
+    .sidebar-banner-col {
+      width: 160px; flex-shrink: 0; padding: 16px 8px;
+      display: flex; flex-direction: column; gap: 12px; align-items: center;
+      overflow: hidden; position: relative;
+    }
+    .sidebar-banner-col a { display: block; width: 140px; }
+    .sidebar-banner-col img { width: 140px; height: auto; border-radius: 4px; display: block; }
+    .sidebar-banner-col .cms-banner-track { display: flex; flex-direction: column; transition: transform 0.5s ease; }
+    .sidebar-banner-col .cms-banner-slide { min-height: 100%; flex-shrink: 0; }
+    .page-wrap-inner { flex: 1; min-width: 0; }
+
+    /* FOOTER */
+    .site-footer { background: var(--dark); color: #aaa; text-align: center; padding: 20px; font-size: 0.8rem; margin-top: 12px; }
+    .site-footer a { color: #ff6b6b; }
+
+    /* SEARCH */
+    .search-toggle { display: flex; align-items: center; padding: 13px 14px !important; }
+    .search-toggle svg { opacity: 0.7; transition: opacity 0.2s; }
+    .search-toggle:hover svg { opacity: 1; }
+    .search-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(4px);
+      display: flex; flex-direction: column; align-items: center; padding-top: 120px;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .search-overlay.open { opacity: 1; pointer-events: all; }
+    .search-box {
+      display: flex; width: 90%; max-width: 600px;
+      background: var(--white); border-radius: 6px; overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+    .search-box input {
+      flex: 1; border: none; outline: none; padding: 16px 20px;
+      font-size: 1rem; font-family: 'Open Sans', sans-serif; color: var(--text);
+    }
+    .search-box button {
+      border: none; background: var(--red); color: #fff; padding: 0 20px;
+      cursor: pointer; display: flex; align-items: center;
+    }
+    .search-results {
+      width: 90%; max-width: 600px; max-height: 50vh; overflow-y: auto;
+      margin-top: 8px; border-radius: 6px;
+    }
+    .search-results a {
+      display: flex; gap: 12px; padding: 12px 16px; background: var(--white);
+      border-bottom: 1px solid #eee; transition: background 0.15s; align-items: center;
+    }
+    .search-results a:first-child { border-radius: 6px 6px 0 0; }
+    .search-results a:last-child { border-radius: 0 0 6px 6px; border-bottom: none; }
+    .search-results a:hover { background: #f5f5f5; }
+    .search-results img { width: 60px; height: 45px; object-fit: cover; border-radius: 3px; flex-shrink: 0; }
+    .search-results .sr-text { min-width: 0; }
+    .search-results .sr-cat { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--red); }
+    .search-results .sr-title { font-size: 0.85rem; font-weight: 700; line-height: 1.3; color: var(--text); }
+    .search-results .sr-empty { padding: 20px; text-align: center; background: var(--white); border-radius: 6px; color: var(--muted); font-size: 0.85rem; }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .sidebar-banner-col { display: none; }
+      .page-with-sidebars { display: block; }
+      .site-header .banner-slot { display: none; }
+      .site-header .logo-center .site-title { font-size: 1.5rem; }
+      .topbar nav { flex-wrap: wrap; justify-content: center; }
+      .topbar nav a { padding: 10px 12px; font-size: 0.75rem; }
+      .tg-section { flex-direction: column; }
+      .tg-side { flex-direction: row; }
+      .tg-side .side-card img { height: 100px; flex: none; }
+      .h-news-grid { grid-template-columns: 1fr 1fr; }
+      .yt-section { flex-direction: column; }
+      .yt-side { max-height: 200px; flex-direction: row; }
+      .yt-side img { width: 120px; height: auto; }
+      .overlay-grid { grid-template-columns: repeat(2, 1fr); }
+      .mix-row-5 { grid-template-columns: repeat(3, 1fr); }
+      .mix-row-3 { grid-template-columns: 1fr 1fr; }
+      .slideshow-wrap { aspect-ratio: 16/9; }
+    }
+    @media (max-width: 640px) {
+      .site-header { flex-direction: column; padding: 10px 16px; }
+      .site-header .logo-center .site-title { font-size: 1.3rem; }
+      .topbar nav a { padding: 8px 10px; font-size: 0.7rem; }
+      .tg-section { gap: 8px; }
+      .tg-side { flex-direction: column; gap: 8px; }
+      .tg-side .side-card img { height: 120px; flex: none; }
+      .h-news-grid { grid-template-columns: 1fr; }
+      .h-card { flex-direction: column; }
+      .h-card img { width: 100%; height: 160px; }
+      .overlay-grid { grid-template-columns: 1fr; }
+      .overlay-card { aspect-ratio: 16/9; }
+      .mix-row-5 { grid-template-columns: 1fr 1fr; }
+      .mix-row-3 { grid-template-columns: 1fr; }
+      .yt-section { gap: 8px; }
+      .yt-side { flex-direction: column; max-height: none; }
+      .yt-side img { width: 100%; height: 150px; }
+      .page-wrap { padding: 16px 12px; }
+      .section-title h2 { font-size: 0.72rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="banner-slot">
+    <a href="https://www.ezcape.it/?utm_source=valbrembanaweb" target="_blank" rel="noopener">
+      <img src="images/banner-header.png" alt="eZcape.it">
+    </a>
+  </div>
+  <div class="logo-center">
+    <img src="images/logo-vbw-def.png" alt="Valbrembana Web logo">
+    <div class="site-title">Valbrembana Web</div>
+    <div class="site-tagline">Il portale della Valle Brembana e delle Orobie</div>
+  </div>
+  <div class="banner-slot">
+    <a href="#">
+      <img src="images/banner-vintage.jpg" alt="Sponsor">
+    </a>
+  </div>
+</header>
+
+<div class="topbar">
+  <nav>
+    <a href="index.html" class="active">Home</a>
+    <a href="notizie.html">Notizie</a>
+    <a href="categoria.html?cat=cronaca">Cronaca</a>
+    <a href="categoria.html?cat=in-evidenza">In Evidenza</a>
+    <a href="categoria.html?cat=sport">Sport</a>
+    <a href="categoria.html?cat=storie-e-personaggi">Storie</a>
+    <a href="categoria.html?cat=eventi">Eventi</a>
+    <a href="categoria.html?cat=appuntamenti">Appuntamenti</a>
+    <a href="farmacie.html">Farmacie</a>
+    <a href="https://www.youtube.com/@valbrembanaweb" target="_blank">Video &nearr;</a>
+    <a href="#" class="search-toggle" onclick="event.preventDefault();document.getElementById('search-overlay').classList.toggle('open');" aria-label="Cerca">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </a>
+  </nav>
+</div>
+
+<!-- Search overlay -->
+<div id="search-overlay" class="search-overlay" onclick="if(event.target===this)this.classList.remove('open');">
+  <div class="search-box">
+    <input type="text" id="search-input" placeholder="Cerca notizie..." autocomplete="off">
+    <button onclick="doSearch()" aria-label="Cerca">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+<div class="ticker-wrap">
+  <div class="ticker-label">&#9889; Ultime</div>
+  <div style="overflow:hidden;flex:1;">
+    <div class="ticker-track">
+      <span>Foppolo-Carona: seggiovie CHIUSE il 26 marzo per forte vento</span>
+      <span>Piazzatorre: impianti chiusi</span>
+      <span>Valtorta-Bobbio: impianti aperti</span>
+      <span>Oltre il Colle: pista di fondo aperta</span>
+      <span>Dossena 27 marzo: festa del Madun&#xF9;</span>
+      <span>Serina 28 marzo: Palio &ndash; musica, food e giochi</span>
+      <span>Trescore Balneario: studente accoltella insegnante, &egrave; grave</span>
+      <span>Tranvia Bergamo-Villa d&rsquo;Alm&egrave;: presentato il primo tram</span>
+      <span>Foppolo-Carona: seggiovie CHIUSE il 26 marzo per forte vento</span>
+      <span>Piazzatorre: impianti chiusi</span>
+      <span>Valtorta-Bobbio: impianti aperti</span>
+      <span>Oltre il Colle: pista di fondo aperta</span>
+      <span>Dossena 27 marzo: festa del Madun&#xF9;</span>
+      <span>Serina 28 marzo: Palio &ndash; musica, food e giochi</span>
+      <span>Trescore Balneario: studente accoltella insegnante, &egrave; grave</span>
+      <span>Tranvia Bergamo-Villa d&rsquo;Alm&egrave;: presentato il primo tram</span>
+    </div>
+  </div>
+</div>
+
+<div class="page-with-sidebars">
+
+<!-- SIDEBAR BANNER SINISTRA -->
+<aside class="sidebar-banner-col" id="cms-sidebar-left">
+  <!-- Fallback statico — CMS sovrascrive se ha banner -->
+  <a href="https://www.ezcape.it/?utm_source=valbrembanaweb&utm_medium=sidebar-left" target="_blank" rel="noopener">
+    <img src="images/banner-vintage.jpg" alt="Sponsor">
+  </a>
+  <a href="farmacie.html">
+    <img src="images/banner-centrale.png" alt="Farmacie">
+  </a>
+</aside>
+
+<div class="page-wrap-inner">
+<div class="page-wrap">
+
+  <!-- TG ANIMATO -->
+  <section class="vbw-section tg-section">
+    <div class="tg-side">
+      <div class="side-card">
+        <img src="images/news-foppolo.jpg" alt="Foppolo">
+        <div class="cat">In Evidenza</div>
+        <h4>Freddo e raffiche: il 26 marzo seggiovie chiuse a Foppolo-Carona</h4>
+      </div>
+      <div class="side-card">
+        <img src="images/news-canali.jpg" alt="Canale Zogno">
+        <div class="cat">In Evidenza</div>
+        <h4>Centrale a Zogno chiusa, canale pieno di melma. San Pellegrino: si riapra</h4>
+      </div>
+    </div>
+
+    <div class="tg-player">
+      <video id="tg-video" autoplay muted loop playsinline>
+        <source src="tg_video.mp4" type="video/mp4">
+      </video>
+      <div class="tg-hud">
+        <div class="tg-badge">&#9679; LIVE</div>
+        <div class="tg-edition" id="tg-time">Edizione delle 13:00</div>
+        <div class="tg-lower" id="tg-lower">
+          <div class="tg-cat" id="tg-cat">In Evidenza</div>
+          <h3 id="tg-headline">Sacra Spina a San Giovanni Bianco: la processione emoziona la Valle</h3>
+        </div>
+      </div>
+      <audio id="tg-audio" src="audio/tg-full-voiceover.mp3" preload="auto"></audio>
+    </div>
+
+    <div class="tg-side">
+      <div class="side-card">
+        <img src="images/news-tram.jpg" alt="Tram">
+        <div class="cat">In Evidenza</div>
+        <h4>Tranvia Bergamo-Villa d&rsquo;Alm&egrave;: presentato il primo tram, prove ad aprile</h4>
+      </div>
+      <div class="side-card">
+        <img src="images/news-fuochi.jpg" alt="Fuochi">
+        <div class="cat">Cultura</div>
+        <h4>Sacra Spina: i fuochi d&rsquo;artificio incantano San Giovanni Bianco</h4>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 NOTIZIE ORIZZONTALI -->
+  <div class="section-title"><div class="dot"></div><h2>In Primo Piano</h2><div class="line"></div></div>
+  <section class="vbw-section h-news-grid">
+    <a href="notizie.html" class="h-card">
+      <img src="images/featured-10206.jpg" alt="Trescore">
+      <div class="h-card-body">
+        <div class="cat">Cronaca</div>
+        <h3>A Trescore Balneario studente accoltella un&rsquo;insegnante: &egrave; grave</h3>
+        <p>Grave episodio di violenza il 25 marzo. La docente trasportata in gravi condizioni all&rsquo;ospedale.</p>
+        <div class="date">25 mar 2026</div>
+      </div>
+    </a>
+    <a href="notizie.html" class="h-card">
+      <img src="images/featured-89635.jpg" alt="Stadio">
+      <div class="h-card-body">
+        <div class="cat">Sport</div>
+        <h3>Fondi dalla Regione per i campi da calcio di San Pellegrino e Val Brembilla</h3>
+        <p>Nuove tribune e spogliatoi per lo stadio Quarenghi e il campo di Val Brembilla.</p>
+        <div class="date">24 mar 2026</div>
+      </div>
+    </a>
+    <a href="notizie.html" class="h-card">
+      <img src="images/news-luiselli.jpg" alt="Luiselli">
+      <div class="h-card-body">
+        <div class="cat">Cultura</div>
+        <h3>Addio a Luiselli: giornalista, storico e segretario comunale della Valle</h3>
+        <p>La Val Brembana piange Bernardino Luiselli, intellettuale dalla grande memoria storica.</p>
+        <div class="date">20 mar 2026</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- GALLERY YOUTUBE -->
+  <div class="section-title"><div class="dot"></div><h2>Video dalla Valle</h2><div class="line"></div></div>
+  <section class="vbw-section yt-section">
+    <div class="yt-side">
+      <img src="images/featured-89672.jpg" alt="Goglio">
+      <div class="yt-side-body">
+        <div class="cat">Cultura</div>
+        <h3>Piazza Brembana: un libro per il genio fotografico di Eugenio Goglio</h3>
+        <p>Sabato 28 marzo, sala polivalente, presentazione del volume su fotografo, pittore e scultore.</p>
+      </div>
+    </div>
+
+    <div class="yt-gallery">
+      <div class="yt-main-video">
+        <iframe id="yt-main" src="https://www.youtube.com/embed/kTSk6vACYzs?rel=0" allowfullscreen loading="lazy" title="Sacra Spina 2026"></iframe>
+      </div>
+      <div class="yt-thumbs">
+        <div class="yt-thumb" onclick="switchVideo('kvC1zmSs_ZU')">
+          <img src="https://img.youtube.com/vi/kvC1zmSs_ZU/mqdefault.jpg" alt="Frana San Pellegrino">
+          <div class="yt-thumb-title">Frana via Tasso, San Pellegrino</div>
+        </div>
+        <div class="yt-thumb" onclick="switchVideo('_Oc4FQrAZ2Q')">
+          <img src="https://img.youtube.com/vi/_Oc4FQrAZ2Q/mqdefault.jpg" alt="Via Olimpia">
+          <div class="yt-thumb-title">Via Olimpia, Alm&egrave;</div>
+        </div>
+        <div class="yt-thumb" onclick="switchVideo('svf9XhwVoEI')">
+          <img src="https://img.youtube.com/vi/svf9XhwVoEI/mqdefault.jpg" alt="Nikolajewka">
+          <div class="yt-thumb-title">Trofeo Nikolajewka</div>
+        </div>
+        <div class="yt-thumb" onclick="switchVideo('HeW6ZkT1Ti8')">
+          <img src="https://img.youtube.com/vi/HeW6ZkT1Ti8/mqdefault.jpg" alt="Carnevale">
+          <div class="yt-thumb-title">Carnevale 2026 &ndash; San Giovanni B.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="yt-side">
+      <img src="images/featured-89683.jpg" alt="Avaro">
+      <div class="yt-side-body">
+        <div class="cat">Sport</div>
+        <h3>Piani dell&rsquo;Avaro: grande partecipazione al Trofeo Nikolajewka</h3>
+        <p>Sci di fondo per la memoria della battaglia. Appassionati da tutta la provincia.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="vbw-sep">
+
+  <!-- 4 OVERLAY GRID -->
+  <div class="section-title"><div class="dot"></div><h2>Dall&rsquo;Archivio</h2><div class="line"></div></div>
+  <section class="vbw-section overlay-grid">
+    <a href="notizie.html" class="overlay-card">
+      <img src="images/news-fuochi.jpg" alt="Fuochi">
+      <div class="ov-body">
+        <div class="ov-cat">Cultura</div>
+        <div class="ov-title">Sacra Spina: fuochi d&rsquo;artificio a San Giovanni Bianco</div>
+      </div>
+    </a>
+    <a href="notizie.html" class="overlay-card">
+      <img src="images/news-tram.jpg" alt="Tram">
+      <div class="ov-body">
+        <div class="ov-cat">In Evidenza</div>
+        <div class="ov-title">Presentato il primo tram della linea T2 Bergamo-Villa d&rsquo;Alm&egrave;</div>
+      </div>
+    </a>
+    <a href="notizie.html" class="overlay-card">
+      <img src="images/news-foppolo.jpg" alt="Foppolo">
+      <div class="ov-body">
+        <div class="ov-cat">In Evidenza</div>
+        <div class="ov-title">Foppolo-Carona: seggiovie chiuse il 26 marzo per forte vento</div>
+      </div>
+    </a>
+    <a href="notizie.html" class="overlay-card">
+      <img src="images/news-canali.jpg" alt="Canale">
+      <div class="ov-body">
+        <div class="ov-cat">In Evidenza</div>
+        <div class="ov-title">Canale di Zogno pieno di melma: i Comuni chiedono intervento</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- BANNER INLINE -->
+  <section class="vbw-section" style="text-align:center;">
+    <a href="https://www.ezcape.it/?utm_source=valbrembanaweb&utm_medium=inline" target="_blank" rel="noopener">
+      <img src="images/banner-ezcape.png" alt="eZcape.it" style="max-width:100%;height:auto;border-radius:4px;">
+    </a>
+  </section>
+
+  <!-- MIX ROW 5 -->
+  <div class="section-title"><div class="dot"></div><h2>Ultime Notizie</h2><div class="line"></div></div>
+  <section class="vbw-section mix-row-5">
+    <a href="notizie.html" class="mini-card">
+      <img src="images/news-luiselli.jpg" alt="Luiselli">
+      <div class="mini-card-body">
+        <div class="cat">Cultura</div>
+        <h4>Addio a Bernardino Luiselli, storico della Valle Brembana</h4>
+      </div>
+    </a>
+    <a href="notizie.html" class="mini-card">
+      <img src="images/featured-10206.jpg" alt="Trescore">
+      <div class="mini-card-body">
+        <div class="cat">Cronaca</div>
+        <h4>Studente accoltella insegnante a Trescore: &egrave; grave</h4>
+      </div>
+    </a>
+    <a href="notizie.html" class="mini-card">
+      <img src="images/featured-89635.jpg" alt="Sport">
+      <div class="mini-card-body">
+        <div class="cat">Sport</div>
+        <h4>Regione finanzia la riqualifica degli stadi locali</h4>
+      </div>
+    </a>
+    <a href="notizie.html" class="mini-card">
+      <img src="images/featured-89703.jpg" alt="Dossena">
+      <div class="mini-card-body">
+        <div class="cat">Valle</div>
+        <h4>Dossena, 27 marzo: grande attesa per la festa del Madun&#xF9;</h4>
+      </div>
+    </a>
+    <a href="notizie.html" class="mini-card">
+      <img src="images/featured-89672.jpg" alt="Goglio">
+      <div class="mini-card-body">
+        <div class="cat">Cultura</div>
+        <h4>Un libro per Eugenio Goglio, il genio fotografo di Piazza Brembana</h4>
+      </div>
+    </a>
+  </section>
+
+  <!-- MIX ROW 3 -->
+  <div class="section-title"><div class="dot"></div><h2>Da Non Perdere</h2><div class="line"></div></div>
+  <section class="vbw-section mix-row-3">
+    <a href="notizie.html" class="med-card">
+      <img src="images/news-tram.jpg" alt="Tram">
+      <div class="med-card-body">
+        <div class="cat">In Evidenza</div>
+        <h3>Tranvia T2: prime prove ad aprile per il tram Bergamo-Villa d&rsquo;Alm&egrave;</h3>
+        <p>Al deposito TEB di Ranica la presentazione ufficiale del primo tram. Un momento storico per la mobilit&agrave; del territorio brembano.</p>
+      </div>
+    </a>
+    <a href="notizie.html" class="med-card">
+      <img src="images/featured-89683.jpg" alt="Avaro">
+      <div class="med-card-body">
+        <div class="cat">Sport</div>
+        <h3>Trofeo Nikolajewka ai Piani dell&rsquo;Avaro: sci di fondo per la memoria</h3>
+        <p>La tradizionale gara di fondo sulle nevi dei Piani dell&rsquo;Avaro ha richiamato appassionati da tutta la provincia di Bergamo.</p>
+      </div>
+    </a>
+    <a href="farmacie.html" class="med-card">
+      <img src="images/banner-centrale.png" alt="Farmacie">
+      <div class="med-card-body">
+        <div class="cat">Servizi</div>
+        <h3>Turno farmacie &ndash; 26 marzo 2026</h3>
+        <p>Farmacia Comunale San Giovanni Bianco aperta 9:00&ndash;13:00 e 16:00&ndash;19:00. Farmacia Pesenti San Pellegrino: turno notturno. Scopri tutte le farmacie di turno.</p>
+      </div>
+    </a>
+  </section>
+
+  <!-- SLIDESHOW FOTO VALLE -->
+  <section class="vbw-section">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <div style="width:6px;height:6px;background:var(--red);border-radius:50%;"></div>
+      <h2 style="font-family:'Roboto',sans-serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Foto dalla Valle</h2>
+      <div style="flex:1;height:1px;background:var(--border);"></div>
+    </div>
+    <div class="slideshow-wrap" style="position:relative;width:100%;aspect-ratio:21/9;overflow:hidden;border-radius:4px;background:#111;">
+      <div class="slideshow-track" id="slideshow-track" style="display:flex;width:100%;height:100%;transition:transform 0.6s ease;">
+        <div style="min-width:100%;height:100%;"><img src="images/news-fuochi.jpg" alt="Fuochi San Giovanni" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="min-width:100%;height:100%;"><img src="images/news-foppolo.jpg" alt="Foppolo" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="min-width:100%;height:100%;"><img src="images/featured-89683.jpg" alt="Piani Avaro" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="min-width:100%;height:100%;"><img src="images/news-tram.jpg" alt="Tram T2" style="width:100%;height:100%;object-fit:cover;"></div>
+        <div style="min-width:100%;height:100%;"><img src="images/news-canali.jpg" alt="Canale Zogno" style="width:100%;height:100%;object-fit:cover;"></div>
+      </div>
+      <button onclick="slideMove(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;">&#8249;</button>
+      <button onclick="slideMove(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.6);color:#fff;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;">&#8250;</button>
+      <div id="slideshow-dots" style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;"></div>
+    </div>
+  </section>
+
+  <!-- VIDEO DALLA VALLE -->
+  <section class="vbw-section">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <div style="width:6px;height:6px;background:var(--red);border-radius:50%;"></div>
+      <h2 style="font-family:'Roboto',sans-serif;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Video dalla Valle</h2>
+      <div style="flex:1;height:1px;background:var(--border);"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:12px;">
+      <div style="aspect-ratio:16/9;border-radius:4px;overflow:hidden;background:#000;">
+        <iframe id="yt-featured" src="https://www.youtube.com/embed/kTSk6vACYzs?rel=0" allowfullscreen loading="lazy" title="Video in evidenza" style="width:100%;height:100%;border:none;"></iframe>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div onclick="document.getElementById('yt-featured').src='https://www.youtube.com/embed/kvC1zmSs_ZU?autoplay=1&rel=0'" style="cursor:pointer;position:relative;border-radius:4px;overflow:hidden;flex:1;">
+          <img src="https://img.youtube.com/vi/kvC1zmSs_ZU/mqdefault.jpg" alt="Frana San Pellegrino" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));display:flex;align-items:flex-end;padding:8px;">
+            <span style="color:#fff;font-size:0.72rem;font-weight:700;line-height:1.2;">Frana via Tasso, San Pellegrino</span>
+          </div>
+        </div>
+        <div onclick="document.getElementById('yt-featured').src='https://www.youtube.com/embed/_Oc4FQrAZ2Q?autoplay=1&rel=0'" style="cursor:pointer;position:relative;border-radius:4px;overflow:hidden;flex:1;">
+          <img src="https://img.youtube.com/vi/_Oc4FQrAZ2Q/mqdefault.jpg" alt="Via Olimpia" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));display:flex;align-items:flex-end;padding:8px;">
+            <span style="color:#fff;font-size:0.72rem;font-weight:700;line-height:1.2;">Via Olimpia, Almè</span>
+          </div>
+        </div>
+        <div onclick="document.getElementById('yt-featured').src='https://www.youtube.com/embed/HeW6ZkT1Ti8?autoplay=1&rel=0'" style="cursor:pointer;position:relative;border-radius:4px;overflow:hidden;flex:1;">
+          <img src="https://img.youtube.com/vi/HeW6ZkT1Ti8/mqdefault.jpg" alt="Carnevale" style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;inset:0;background:linear-gradient(transparent,rgba(0,0,0,0.7));display:flex;align-items:flex-end;padding:8px;">
+            <span style="color:#fff;font-size:0.72rem;font-weight:700;line-height:1.2;">Carnevale 2026 San Giovanni B.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BANNER BOTTOM -->
+  <section class="vbw-section" style="text-align:center;">
+    <a href="https://www.ezcape.it/?utm_source=valbrembanaweb&utm_medium=bottom" target="_blank" rel="noopener">
+      <img src="images/banner-vintage.jpg" alt="Sponsor" style="max-width:100%;height:auto;border-radius:4px;">
+    </a>
+  </section>
+
+</div>
+</div> <!-- /page-wrap-inner -->
+
+<!-- SIDEBAR BANNER DESTRA -->
+<aside class="sidebar-banner-col" id="cms-sidebar-right">
+  <a href="https://www.ezcape.it/?utm_source=valbrembanaweb&utm_medium=sidebar-right" target="_blank" rel="noopener">
+    <img src="images/banner-header.png" alt="Sponsor" style="width:140px;">
+  </a>
+  <a href="#">
+    <img src="images/banner-vintage.jpg" alt="Sponsor">
+  </a>
+  <a href="farmacie.html">
+    <img src="images/banner-centrale.png" alt="Farmacie">
+  </a>
+</aside>
+
+</div> <!-- /page-with-sidebars -->
+
+<footer class="site-footer">
+  <p>&copy; 2026 <strong>Valbrembana Web</strong> &ndash; Il portale della Valle Brembana e delle Orobie &nbsp;|&nbsp;
+  <a href="mailto:redazione@valbrembanaweb.com">redazione@valbrembanaweb.com</a> &nbsp;|&nbsp;
+  <a href="https://www.facebook.com/Valle.Brembana.Web" target="_blank">Facebook</a> &nbsp;|&nbsp;
+  <a href="https://www.youtube.com/@valbrembanaweb" target="_blank">YouTube</a></p>
+</footer>
+
+<script>
+const tgNews = [
+  { cat: 'In Evidenza', title: 'Sacra Spina a San Giovanni Bianco: la processione emoziona la Valle' },
+  { cat: 'In Evidenza', title: 'Tranvia T2: presentato il primo tram Bergamo-Villa d\'Almè' },
+  { cat: 'Cronaca', title: 'Trescore Balneario: studente accoltella insegnante, è grave' },
+  { cat: 'In Evidenza', title: 'Foppolo-Carona: seggiovie chiuse il 26 marzo per forte vento' },
+  { cat: 'Cultura', title: 'Addio a Bernardino Luiselli: storico e giornalista della Valle Brembana' },
+];
+let tgIdx = 0;
+const elCat = document.getElementById('tg-cat');
+const elHl = document.getElementById('tg-headline');
+const elLower = document.getElementById('tg-lower');
+function rotateTg() {
+  elLower.style.opacity = 0;
+  setTimeout(() => {
+    tgIdx = (tgIdx + 1) % tgNews.length;
+    elCat.textContent = tgNews[tgIdx].cat;
+    elHl.textContent = tgNews[tgIdx].title;
+    elLower.style.opacity = 1;
+  }, 400);
+}
+setInterval(rotateTg, 8000);
+
+function updateTime() {
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('tg-time').textContent = 'Edizione delle ' + h + ':' + m;
+}
+updateTime();
+setInterval(updateTime, 60000);
+
+document.body.addEventListener('click', function unmute() {
+  const v = document.getElementById('tg-video');
+  const a = document.getElementById('tg-audio');
+  v.muted = false;
+  a.play().catch(function(){});
+  document.body.removeEventListener('click', unmute);
+}, { once: true });
+
+function switchVideo(id) {
+  document.getElementById('yt-main').src = 'https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0';
+}
+</script>
+
+<!-- Slideshow -->
+<script>
+var slideIdx = 0;
+var slideCount = document.querySelectorAll('#slideshow-track > div').length;
+var dotsEl = document.getElementById('slideshow-dots');
+for (var si = 0; si < slideCount; si++) {
+  var dot = document.createElement('div');
+  dot.style.cssText = 'width:8px;height:8px;border-radius:50%;cursor:pointer;background:' + (si === 0 ? '#fff' : 'rgba(255,255,255,0.4)');
+  dot.setAttribute('data-i', si);
+  dot.onclick = function() { slideGo(parseInt(this.getAttribute('data-i'))); };
+  dotsEl.appendChild(dot);
+}
+function slideGo(idx) {
+  slideIdx = idx;
+  document.getElementById('slideshow-track').style.transform = 'translateX(-' + (idx * 100) + '%)';
+  dotsEl.querySelectorAll('div').forEach(function(d, i) { d.style.background = i === idx ? '#fff' : 'rgba(255,255,255,0.4)'; });
+}
+function slideMove(dir) { slideGo((slideIdx + dir + slideCount) % slideCount); }
+setInterval(function() { slideMove(1); }, 5000);
+</script>
+
+<!-- CMS Integration -->
+<script src="cms-config.js"></script>
+<script src="cms-loader.js"></script>
+<script>
+(async function() {
+  var articles = await cmsLoadArticles();
+  if (!articles || articles.length === 0) return; // Nessun dato CMS, mantieni contenuti statici
+
+  // --- TICKER: aggiorna con titoli dal CMS ---
+  var tickerTrack = document.querySelector('.ticker-track');
+  if (tickerTrack && articles.length > 0) {
+    var tickerHtml = '';
+    articles.slice(0, 10).forEach(function(a) {
+      tickerHtml += '<span>' + a.title + '</span>';
+    });
+    tickerTrack.innerHTML = tickerHtml + tickerHtml; // duplica per loop seamless
+  }
+
+  // --- TG NEWS: aggiorna rotazione titoli ---
+  if (articles.length > 0 && typeof tgNews !== 'undefined') {
+    tgNews.length = 0;
+    articles.slice(0, 6).forEach(function(a) {
+      var cat = (a.categories && a.categories[0]) ? a.categories[0].name : 'In Evidenza';
+      tgNews.push({ cat: cat, title: a.title });
+    });
+    // Aggiorna subito il primo
+    if (typeof elCat !== 'undefined' && typeof elHl !== 'undefined') {
+      elCat.textContent = tgNews[0].cat;
+      elHl.textContent = tgNews[0].title;
+    }
+  }
+
+  // --- H-NEWS-GRID (3 notizie orizzontali): aggiorna dal CMS ---
+  var hGrid = document.querySelector('.h-news-grid');
+  if (hGrid && articles.length >= 3) {
+    var hHtml = '';
+    articles.slice(0, 3).forEach(function(a) {
+      var cat = (a.categories && a.categories[0]) ? a.categories[0].name : '';
+      hHtml += '<a href="articolo.html?slug=' + a.slug + '" class="h-card">'
+        + '<img src="' + (a.cover_image_url || CMS_PLACEHOLDER_IMG) + '" alt="' + a.title.replace(/"/g, '&quot;') + '">'
+        + '<div class="h-card-body">'
+        + '<div class="cat">' + cat + '</div>'
+        + '<h3>' + a.title + '</h3>'
+        + '<p>' + (a.summary || '').substring(0, 120) + '</p>'
+        + '<div class="date">' + cmsFormatDateShort(a.published_at) + '</div>'
+        + '</div></a>';
+    });
+    hGrid.innerHTML = hHtml;
+  }
+
+  // --- OVERLAY GRID (4 card con immagine): aggiorna dal CMS ---
+  var oGrid = document.querySelector('.overlay-grid');
+  if (oGrid && articles.length >= 7) {
+    var oHtml = '';
+    articles.slice(3, 7).forEach(function(a) {
+      var cat = (a.categories && a.categories[0]) ? a.categories[0].name : '';
+      oHtml += '<a href="articolo.html?slug=' + a.slug + '" class="overlay-card">'
+        + '<img src="' + (a.cover_image_url || CMS_PLACEHOLDER_IMG) + '" alt="' + a.title.replace(/"/g, '&quot;') + '">'
+        + '<div class="ov-body">'
+        + '<div class="ov-cat">' + cat + '</div>'
+        + '<div class="ov-title">' + a.title + '</div>'
+        + '</div></a>';
+    });
+    oGrid.innerHTML = oHtml;
+  }
+
+  // --- MIX ROW 5 (5 mini card): aggiorna dal CMS ---
+  var mRow5 = document.querySelector('.mix-row-5');
+  if (mRow5 && articles.length >= 12) {
+    var mHtml = '';
+    articles.slice(7, 12).forEach(function(a) {
+      var cat = (a.categories && a.categories[0]) ? a.categories[0].name : '';
+      mHtml += '<a href="articolo.html?slug=' + a.slug + '" class="mini-card">'
+        + '<img src="' + (a.cover_image_url || CMS_PLACEHOLDER_IMG) + '" alt="' + a.title.replace(/"/g, '&quot;') + '">'
+        + '<div class="mini-card-body">'
+        + '<div class="cat">' + cat + '</div>'
+        + '<h4>' + a.title + '</h4>'
+        + '</div></a>';
+    });
+    mRow5.innerHTML = mHtml;
+  }
+
+  // --- MIX ROW 3 (3 card medie): aggiorna dal CMS ---
+  var mRow3 = document.querySelector('.mix-row-3');
+  if (mRow3 && articles.length >= 15) {
+    var m3Html = '';
+    articles.slice(12, 15).forEach(function(a) {
+      var cat = (a.categories && a.categories[0]) ? a.categories[0].name : '';
+      m3Html += '<a href="articolo.html?slug=' + a.slug + '" class="med-card">'
+        + '<img src="' + (a.cover_image_url || CMS_PLACEHOLDER_IMG) + '" alt="' + a.title.replace(/"/g, '&quot;') + '">'
+        + '<div class="med-card-body">'
+        + '<div class="cat">' + cat + '</div>'
+        + '<h3>' + a.title + '</h3>'
+        + '<p>' + (a.summary || '').substring(0, 140) + '</p>'
+        + '</div></a>';
+    });
+    mRow3.innerHTML = m3Html;
+  }
+
+  // --- TG SIDE CARDS: aggiorna con articoli in evidenza dal CMS ---
+  var featured = articles.filter(function(a) { return a.is_featured; }).slice(0, 4);
+  if (featured.length === 0) featured = articles.slice(0, 4);
+  var sideCards = document.querySelectorAll('.tg-side .side-card');
+  for (var sci = 0; sci < sideCards.length && sci < featured.length; sci++) {
+    var sc = sideCards[sci];
+    var fa = featured[sci];
+    var scImg = sc.querySelector('img');
+    var scCat = sc.querySelector('.cat');
+    var scH4 = sc.querySelector('h4');
+    if (scImg && fa.cover_image_url) scImg.src = fa.cover_image_url;
+    if (scCat && fa.categories && fa.categories[0]) scCat.textContent = fa.categories[0].name;
+    if (scH4) scH4.textContent = fa.title;
+    sc.style.cursor = 'pointer';
+    sc.setAttribute('data-slug', fa.slug);
+    sc.onclick = function() { location.href = 'articolo.html?slug=' + this.getAttribute('data-slug'); };
+  }
+
+  // --- SLIDESHOW FOTO: aggiorna con immagini dal CMS ---
+  var slideTrack = document.getElementById('slideshow-track');
+  if (slideTrack) {
+    var slideArticles = articles.filter(function(a) { return a.cover_image_url; }).slice(0, 8);
+    if (slideArticles.length >= 3) {
+      var slideHtml = '';
+      slideArticles.forEach(function(a) {
+        slideHtml += '<div style="min-width:100%;height:100%;position:relative;cursor:pointer;" onclick="location.href=\'articolo.html?slug=' + a.slug + '\'">'
+          + '<img src="' + a.cover_image_url + '" alt="' + a.title.replace(/"/g,'&quot;') + '" style="width:100%;height:100%;object-fit:cover;">'
+          + '<div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.75));padding:30px 20px 14px;color:#fff;">'
+          + '<div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:#ff6b6b;margin-bottom:4px;">' + ((a.categories&&a.categories[0]) ? a.categories[0].name : '') + '</div>'
+          + '<div style="font-size:0.9rem;font-weight:700;line-height:1.3;">' + a.title + '</div>'
+          + '</div></div>';
+      });
+      slideTrack.innerHTML = slideHtml;
+      // Re-init dots
+      slideCount = slideArticles.length;
+      slideIdx = 0;
+      var dotsEl2 = document.getElementById('slideshow-dots');
+      dotsEl2.innerHTML = '';
+      for (var di = 0; di < slideCount; di++) {
+        var dot2 = document.createElement('div');
+        dot2.style.cssText = 'width:8px;height:8px;border-radius:50%;cursor:pointer;background:' + (di === 0 ? '#fff' : 'rgba(255,255,255,0.4)');
+        dot2.setAttribute('data-i', di);
+        dot2.onclick = function() { slideGo(parseInt(this.getAttribute('data-i'))); };
+        dotsEl2.appendChild(dot2);
+      }
+    }
+  }
+
+  // --- BANNER SIDEBAR: carica dal CMS se disponibili ---
+  cmsRenderBannerZone('cms-sidebar-left', 'sidebar-left', { direction: 'vertical', interval: 6000 });
+  cmsRenderBannerZone('cms-sidebar-right', 'sidebar-right', { direction: 'vertical', interval: 7000 });
+
+  // --- SEARCH: ricerca live negli articoli CMS ---
+  window._cmsArticles = articles;
+})();
+
+var _searchTimeout;
+document.getElementById('search-input').addEventListener('input', function() {
+  clearTimeout(_searchTimeout);
+  _searchTimeout = setTimeout(function() { doSearch(); }, 250);
+});
+document.getElementById('search-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doSearch();
+  if (e.key === 'Escape') document.getElementById('search-overlay').classList.remove('open');
+});
+
+function doSearch() {
+  var q = document.getElementById('search-input').value.trim().toLowerCase();
+  var results = document.getElementById('search-results');
+  if (!q || q.length < 2) { results.innerHTML = ''; return; }
+  var articles = window._cmsArticles || [];
+  var found = articles.filter(function(a) {
+    return (a.title && a.title.toLowerCase().indexOf(q) >= 0)
+      || (a.summary && a.summary.toLowerCase().indexOf(q) >= 0);
+  }).slice(0, 8);
+
+  if (found.length === 0) {
+    results.innerHTML = '<div class="sr-empty">Nessun risultato per "' + q + '"</div>';
+    return;
+  }
+  var html = '';
+  found.forEach(function(a) {
+    var cat = (a.categories && a.categories[0]) ? a.categories[0].name : '';
+    html += '<a href="articolo.html?slug=' + a.slug + '">'
+      + '<img src="' + (a.cover_image_url || CMS_PLACEHOLDER_IMG) + '" alt="">'
+      + '<div class="sr-text">'
+      + '<div class="sr-cat">' + cat + '</div>'
+      + '<div class="sr-title">' + a.title + '</div>'
+      + '</div></a>';
+  });
+  results.innerHTML = html;
+}
+</script>
+</body>
+</html>

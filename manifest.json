@@ -1,0 +1,20 @@
+{
+  "id": "demo-valbrembana",
+  "name": "Demo Valbrembana Web",
+  "description": "Demo sito moderno per la testata ValbrembanawWeb - homepage con TG animato, news ticker, gallery YouTube e news grid",
+  "version": "1.0",
+  "entryPoint": "index.html",
+  "status": "complete",
+  "createdAt": "2026-03-26T00:00:00.000Z",
+  "updatedAt": "2026-03-26T00:48:00.000Z",
+  "files": [
+    "index.html",
+    "style.css",
+    "script.js",
+    "tg_video.mp4",
+    "notizie.html",
+    "farmacie.html",
+    "images/",
+    "audio/"
+  ]
+}

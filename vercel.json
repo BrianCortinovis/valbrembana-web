@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    { "source": "/articolo/:slug", "destination": "/articolo.html?slug=:slug" },
+    { "source": "/categoria/:cat", "destination": "/categoria.html?cat=:cat" },
+    { "source": "/notizie", "destination": "/notizie.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
+      ]
+    }
+  ]
+}

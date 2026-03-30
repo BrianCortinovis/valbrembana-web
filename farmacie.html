@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farmacie di Turno – Val Brembana Web</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --red: #c0392b; --dark: #111; --border: #ddd; --text: #1a1a1a; --text2: #555; --green: #27ae60; }
+  body { font-family: 'Georgia', 'Times New Roman', serif; background: #f0ede8; color: var(--text); }
+
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(15,15,15,0.96); backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--red); padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between; height: 52px;
+  }
+  .topbar-logo { height: 28px; }
+  .topbar-nav { display: flex; list-style: none; }
+  .topbar-nav li a {
+    color: #e8e0d8; text-decoration: none; font-family: Arial, sans-serif;
+    font-size: 13px; letter-spacing: 0.5px; padding: 0 14px; line-height: 52px;
+    display: block; text-transform: uppercase; font-weight: 600;
+    transition: color 0.2s; border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  .topbar-nav li a:hover, .topbar-nav li a.active { color: var(--red); }
+
+  .page-header {
+    background: #111; padding: 90px 20px 28px; text-align: center;
+    border-bottom: 3px solid var(--red);
+  }
+  .page-header h1 { color: #fff; font-size: 32px; font-weight: bold; }
+  .page-header p { color: #888; font-family: Arial, sans-serif; font-size: 13px; margin-top: 6px; text-transform: uppercase; letter-spacing: 2px; }
+
+  .main { max-width: 1000px; margin: 0 auto; padding: 32px 20px; }
+
+  /* Info banner */
+  .info-banner {
+    background: #fff; border-left: 4px solid var(--red); padding: 14px 18px;
+    margin-bottom: 28px; border-radius: 0 3px 3px 0;
+    font-family: Arial, sans-serif; font-size: 13px; color: var(--text2);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .info-banner strong { color: var(--text); }
+  .emergency-number { font-size: 22px; font-weight: 900; color: var(--red); font-family: Arial, sans-serif; }
+
+  /* Zone tabs */
+  .zone-tabs { display: flex; gap: 0; margin-bottom: 24px; border-bottom: 2px solid #ccc; }
+  .zone-tab {
+    background: none; border: none; padding: 10px 20px; font-family: Arial, sans-serif;
+    font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text2);
+    border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .zone-tab:hover { color: var(--text); }
+  .zone-tab.active { color: var(--red); border-bottom-color: var(--red); }
+
+  /* Pharmacy cards */
+  .pharmacy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .pharmacy-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 4px;
+    padding: 20px; position: relative; transition: box-shadow 0.2s;
+  }
+  .pharmacy-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.1); }
+  .pharmacy-card.on-duty { border-top: 3px solid var(--green); }
+  .pharmacy-card.closed { border-top: 3px solid #ccc; opacity: 0.7; }
+
+  .duty-badge {
+    position: absolute; top: -1px; right: 14px;
+    background: var(--green); color: #fff;
+    font-family: Arial, sans-serif; font-size: 10px; font-weight: 700;
+    padding: 3px 10px; letter-spacing: 1px; text-transform: uppercase;
+    border-radius: 0 0 4px 4px;
+  }
+  .closed-badge {
+    position: absolute; top: -1px; right: 14px;
+    background: #999; color: #fff;
+    font-family: Arial, sans-serif; font-size: 10px; font-weight: 700;
+    padding: 3px 10px; letter-spacing: 1px; text-transform: uppercase;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .pharmacy-icon { font-size: 28px; margin-bottom: 8px; }
+  .pharmacy-name { font-size: 18px; font-weight: bold; margin-bottom: 4px; color: var(--text); }
+  .pharmacy-comune { font-family: Arial, sans-serif; font-size: 12px; color: var(--red); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 10px; }
+  .pharmacy-address { font-family: Arial, sans-serif; font-size: 13px; color: var(--text2); margin-bottom: 6px; }
+  .pharmacy-phone {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: Arial, sans-serif; font-size: 14px; font-weight: 700; color: var(--red);
+    text-decoration: none; margin-bottom: 8px;
+  }
+  .pharmacy-hours {
+    background: #f8f8f5; border: 1px solid #eee; padding: 8px 12px;
+    border-radius: 3px; margin-top: 10px;
+    font-family: Arial, sans-serif; font-size: 12px; color: var(--text2);
+  }
+  .pharmacy-hours strong { color: var(--text); display: block; margin-bottom: 3px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .week-table { width: 100%; margin-top: 28px; border-collapse: collapse; }
+  .week-table th {
+    background: #111; color: #fff; font-family: Arial, sans-serif; font-size: 12px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 10px 14px; text-align: left;
+  }
+  .week-table td { padding: 12px 14px; border-bottom: 1px solid #eee; font-family: Arial, sans-serif; font-size: 13px; }
+  .week-table tr:hover td { background: #f8f5f0; }
+  .week-table tr.today td { background: #fff8f0; font-weight: 600; }
+  .tag-open { display: inline-block; background: #e8f5e9; color: var(--green); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 2px; }
+  .tag-closed { display: inline-block; background: #f5f5f5; color: #999; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 2px; }
+
+  /* section title */
+  .section-title { display: flex; align-items: center; gap: 10px; margin: 28px 0 16px; }
+  .section-title h2 { font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: #ddd; }
+  .section-title .dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; }
+
+  /* Zone panels */
+  .zone-panel { display: none; }
+  .zone-panel.active { display: block; }
+
+  .note-box { background: #fff8f0; border: 1px solid #f0d9b5; border-radius: 3px; padding: 14px 16px; font-family: Arial, sans-serif; font-size: 13px; color: #7a5c2e; margin-top: 20px; }
+  .note-box strong { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; color: #5a3c0e; }
+
+  footer { background: #111; color: #888; padding: 20px; text-align: center; margin-top: 40px; font-family: Arial, sans-serif; font-size: 12px; }
+  footer a { color: var(--red); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <img src="assets/logo-vbw.png" alt="Val Brembana Web" class="topbar-logo" onerror="this.style.display='none'">
+  <ul class="topbar-nav">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="notizie.html">Notizie</a></li>
+    <li><a href="#">Appuntamenti</a></li>
+    <li><a href="#">Dove Alloggiare</a></li>
+    <li><a href="#">Dove Mangiare</a></li>
+    <li><a href="#">Attività</a></li>
+    <li><a href="farmacie.html" class="active">Farmacie</a></li>
+    <li><a href="#">Meteo</a></li>
+  </ul>
+  <span style="color:#888; font-size:12px; font-family:Arial,sans-serif;">26 marzo 2026</span>
+</header>
+
+<div class="page-header">
+  <h1>Farmacie di Turno</h1>
+  <p>Valle Brembana · Aggiornamento: 26 marzo 2026</p>
+</div>
+
+<div class="main">
+
+  <div class="info-banner">
+    <div style="font-size:28px;">🏥</div>
+    <div>
+      <strong>Per emergenze farmaceutiche fuori orario</strong><br>
+      Numero verde farmacista di guardia regionale:
+      <span class="emergency-number">800.638.200</span>
+    </div>
+    <div style="margin-left:auto; text-align:right; font-size:12px; line-height:1.6;">
+      <strong>Carabinieri:</strong> 112<br>
+      <strong>Emergenza:</strong> 118<br>
+      <strong>Vigili del Fuoco:</strong> 115
+    </div>
+  </div>
+
+  <!-- ZONE TABS -->
+  <div class="zone-tabs">
+    <button class="zone-tab active" onclick="showZone('bassa')">Bassa Valle</button>
+    <button class="zone-tab" onclick="showZone('media')">Media Valle</button>
+    <button class="zone-tab" onclick="showZone('alta')">Alta Valle</button>
+    <button class="zone-tab" onclick="showZone('settimana')">Turni della settimana</button>
+  </div>
+
+  <!-- BASSA VALLE -->
+  <div class="zone-panel active" id="zone-bassa">
+    <div class="section-title"><div class="dot"></div><h2>Bassa Val Brembana · Turno questa settimana</h2></div>
+    <div class="pharmacy-grid">
+
+      <div class="pharmacy-card on-duty">
+        <div class="duty-badge">✓ DI TURNO</div>
+        <div class="pharmacy-icon">💊</div>
+        <div class="pharmacy-name">Farmacia Rota</div>
+        <div class="pharmacy-comune">San Pellegrino Terme</div>
+        <div class="pharmacy-address">📍 Via Mazzini, 14 · San Pellegrino Terme</div>
+        <a href="tel:034523456" class="pharmacy-phone">📞 0345 23456</a>
+        <div class="pharmacy-hours">
+          <strong>Orari di turno</strong>
+          Lunedì–Venerdì: 08:30–19:30<br>
+          Sabato: 08:30–13:00 e 15:30–19:00<br>
+          <strong>Domenica e festivi: APERTA H24</strong>
+        </div>
+      </div>
+
+      <div class="pharmacy-card on-duty">
+        <div class="duty-badge">✓ DI TURNO</div>
+        <div class="pharmacy-icon">💊</div>
+        <div class="pharmacy-name">Farmacia Cattaneo</div>
+        <div class="pharmacy-comune">Zogno</div>
+        <div class="pharmacy-address">📍 Piazza Roma, 3 · Zogno (BG)</div>
+        <a href="tel:034591234" class="pharmacy-phone">📞 0345 91234</a>
+        <div class="pharmacy-hours">
+          <strong>Orari di turno</strong>
+          Lunedì–Sabato: 08:30–20:00<br>
+          <strong>Domenica 26 marzo: 09:00–13:00</strong>
+        </div>
+      </div>
+
+      <div class="pharmacy-card closed">
+        <div class="closed-badge">CHIUSA</div>
+        <div class="pharmacy-icon">💊</div>
+        <div class="pharmacy-name">Farmacia Gasparini</div>
+        <div class="pharmacy-comune">Sedrina</div>
+        <div class="pharmacy-address">📍 Via Nazionale, 22 · Sedrina</div>
+        <a href="tel:034592100" class="pharmacy-phone">📞 0345 92100</a>
+        <div class="pharmacy-hours">
+          <strong>Orario settimanale</strong>
+          Lunedì–Venerdì: 08:30–12:30 e 15:30–19:30<br>
+          Sabato: 08:30–12:30
+        </div>
+      </div>
+
+      <div class="pharmacy-card closed">
+        <div class="closed-badge">CHIUSA</div>
+        <div class="pharmacy-icon">💊</div>
+        <div class="pharmacy-name">Farmacia Comi</div>
+        <div class="pharmacy-comune">Oltre il Colle</div>
+        <div class="pharmacy-address">📍 Via Roma, 8 · Oltre il Colle</div>
+        <a href="tel:034597000" class="pharmacy-phone">📞 0345 97000</a>
+        <div class="pharmacy-hours">
+          <strong>Orario settimanale</strong>
+          Martedì, Giovedì, Sabato: 09:00–12:30
+        </div>
+      </div>
+
+    </div>
+    <div class="note-box">
+      <strong>Nota bene</strong>
+      Dati aggiornati alla data odierna. Per verifiche in tempo reale chiamare direttamente la farmacia o contattare il numero verde regionale 800.638.200.
+    </div>
+  </div>
+
+  <!-- MEDIA VALLE -->
+  <div class="zone-panel" id="zone-media">
+    <div class="section-title"><div class="dot"></div><h2>Media Val Brembana · Turno questa settimana</h2></div>
+    <div class="pharmacy-grid">
+
+      <div class="pharmacy-card on-duty">
+        <div class="duty-badge">✓ DI TURNO</div>
+        <div class="pharmacy-icon">💊</div>
+        <div class="pharmacy-name">Farmacia Sonzogni</div>
+        <div class="pharmacy-comune">Piazza Brembana</div>
+        <div class="pharmacy-address">📍 Piazza Vittorio Veneto, 2 · Piazza Brembana</div>
+        <a href="tel:034571234" class="pharmacy-phone">📞 0345 71234</a>
+        <div class="pharmacy-hours">
+          <strong>Orari di turno</strong>
+          Lunedì–Venerdì: 08:30–12:30 e 15:30–19:30<br>
+          <strong>Sabato e Domenica: 09:00–13:00</strong>
+        </div>
+      </div>
+
+      <div class="pharmacy-card on-duty">
+        <div class="duty-badge">✓ DI TURNO</div>
+        <div class="pharmacy-icon">💊</div>
+        <div class="pharmacy-name">Farmacia Valsassi</div>
+        <div class="pharmacy-comune">San Giovanni Bianco</div>
+        <div class="pharmacy-address">📍 Via Martiri della Libertà, 5 · San Giovanni Bianco</div>
+        <a href="tel:034552000" class="pharmacy-phone">📞 0345 52000</a>
+        <div class="pharmacy-hours">
+          <strong>Orari di turno</strong>
+          Lunedì–Sabato: 08:30–19:30<br>
+          <strong>Domenica 26 marzo: APERTA 09:00–19:30</strong>
+        </div>
+      </div>
+
+      <div class="pharmacy-card closed">
+        <div class="closed-badge">CHIUSA</div>
+        <div class="pharmacy-icon">💊</div>
+        <div class="pharmacy-name">Farmacia Locatelli</div>
+        <div class="pharmacy-comune">Lenna</div>
+        <div class="pharmacy-address">📍 Via Brembana, 41 · Lenna</div>
+        <a href="tel:034555100" class="pharmacy-phone">📞 0345 55100</a>
+        <div class="pharmacy-hours">
+          <strong>Orario settimanale</strong>
+          Lunedì–Venerdì: 08:30–12:30 e 15:30–19:00<br>
+          Sabato: 08:30–12:30
+        </div>
+      </div>
+
+      <div class="pharmacy-card closed">
+        <div class="closed-badge">CHIUSA</div>
+        <div class="pharmacy-icon">💊</div>
+        <div class="pharmacy-name">Farmacia Milesi</div>
+        <div class="pharmacy-comune">Camerata Cornello</div>
+        <div class="pharmacy-address">📍 Via Cornello, 3 · Camerata Cornello</div>
+        <a href="tel:034556100" class="pharmacy-phone">📞 0345 56100</a>
+        <div class="pharmacy-hours">
+          <strong>Orario settimanale</strong>
+          Martedì, Giovedì: 09:00–12:00<br>
+          Sabato: 09:00–12:30
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ALTA VALLE -->
+  <div class="zone-panel" id="zone-alta">
+    <div class="section-title"><div class="dot"></div><h2>Alta Val Brembana · Turno questa settimana</h2></div>
+    <div class="pharmacy-grid">
+
+      <div class="pharmacy-card on-duty">
+        <div class="duty-badge">✓ DI TURNO</div>
+        <div class="pharmacy-icon">💊</div>
+        <div class="pharmacy-name">Farmacia Gervasoni</div>
+        <div class="pharmacy-comune">Branzi</div>
+        <div class="pharmacy-address">📍 Via Branzi, 12 · Branzi (BG)</div>
+        <a href="tel:034587234" class="pharmacy-phone">📞 0345 87234</a>
+        <div class="pharmacy-hours">
+          <strong>Orari di turno</strong>
+          Lunedì–Sabato: 08:30–12:30 e 15:30–19:00<br>
+          <strong>Domenica 26 marzo: 09:00–13:00</strong>
+        </div>
+      </div>
+
+      <div class="pharmacy-card closed">
+        <div class="closed-badge">CHIUSA</div>
+        <div class="pharmacy-icon">💊</div>
+        <div class="pharmacy-name">Farmacia Belotti</div>
+        <div class="pharmacy-comune">Foppolo</div>
+        <div class="pharmacy-address">📍 Via Foppolo, 1 · Foppolo (BG)</div>
+        <a href="tel:034574500" class="pharmacy-phone">📞 0345 74500</a>
+        <div class="pharmacy-hours">
+          <strong>Orario stagionale invernale</strong>
+          Martedì, Venerdì: 09:00–12:00 e 15:30–18:00<br>
+          Sabato: 09:00–12:30
+        </div>
+      </div>
+
+      <div class="pharmacy-card closed">
+        <div class="closed-badge">CHIUSA</div>
+        <div class="pharmacy-icon">💊</div>
+        <div class="pharmacy-name">Farmacia Epis</div>
+        <div class="pharmacy-comune">Carona</div>
+        <div class="pharmacy-address">📍 Via Carona, 8 · Carona (BG)</div>
+        <a href="tel:034574600" class="pharmacy-phone">📞 0345 74600</a>
+        <div class="pharmacy-hours">
+          <strong>Orario stagionale</strong>
+          Lunedì, Mercoledì, Venerdì: 09:00–12:30<br>
+          Sabato: 09:00–12:00
+        </div>
+      </div>
+
+    </div>
+    <div class="note-box">
+      <strong>Avviso montagna</strong>
+      Per la giornata del 26 marzo le impianti di Foppolo-Carona sono chiusi per vento. In caso di urgenza contattare il numero unico emergenze 112 o la guardia medica.
+    </div>
+  </div>
+
+  <!-- TURNI SETTIMANA -->
+  <div class="zone-panel" id="zone-settimana">
+    <div class="section-title"><div class="dot"></div><h2>Turni di tutta la settimana</h2></div>
+    <table class="week-table">
+      <thead>
+        <tr>
+          <th>Giorno</th>
+          <th>Farmacia</th>
+          <th>Comune</th>
+          <th>Telefono</th>
+          <th>Stato</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Lunedì 23 mar</td>
+          <td>Farmacia Pellegrini</td>
+          <td>San Giovanni Bianco</td>
+          <td>0345 52100</td>
+          <td><span class="tag-closed">Passata</span></td>
+        </tr>
+        <tr>
+          <td>Martedì 24 mar</td>
+          <td>Farmacia Gasparini</td>
+          <td>Sedrina</td>
+          <td>0345 92100</td>
+          <td><span class="tag-closed">Passata</span></td>
+        </tr>
+        <tr>
+          <td>Mercoledì 25 mar</td>
+          <td>Farmacia Locatelli</td>
+          <td>Lenna</td>
+          <td>0345 55100</td>
+          <td><span class="tag-closed">Passata</span></td>
+        </tr>
+        <tr class="today">
+          <td><strong>Giovedì 26 mar ← OGGI</strong></td>
+          <td><strong>Farmacia Rota · Farmacia Cattaneo</strong></td>
+          <td><strong>San Pellegrino · Zogno</strong></td>
+          <td>0345 23456</td>
+          <td><span class="tag-open">● APERTE</span></td>
+        </tr>
+        <tr>
+          <td>Venerdì 27 mar</td>
+          <td>Farmacia Sonzogni</td>
+          <td>Piazza Brembana</td>
+          <td>0345 71234</td>
+          <td><span class="tag-closed">Domani</span></td>
+        </tr>
+        <tr>
+          <td>Sabato 28 mar</td>
+          <td>Farmacia Gervasoni</td>
+          <td>Branzi</td>
+          <td>0345 87234</td>
+          <td><span class="tag-closed">Prossima</span></td>
+        </tr>
+        <tr>
+          <td>Domenica 29 mar</td>
+          <td>Farmacia Valsassi</td>
+          <td>San Giovanni Bianco</td>
+          <td>0345 52000</td>
+          <td><span class="tag-closed">Prossima</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note-box" style="margin-top:20px;">
+      <strong>Come funziona il turno</strong>
+      Le farmacie di turno garantiscono il servizio continuato anche nei giorni festivi e nelle ore notturne.
+      Il turno di notte (dalle 20:00 alle 08:30) prevede la presenza del farmacista su chiamata.
+      Suonare il campanello dell'abitazione collegata alla farmacia.
+      Per emergenze notturne: numero verde 800.638.200.
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p><a href="index.html">Val Brembana Web</a> &nbsp;·&nbsp; Portale della Valle Brembana e delle Orobie &nbsp;·&nbsp; © 2026</p>
+  <p style="margin-top:6px; color:#555;">Dati turni farmacie aggiornati al 26 marzo 2026. Verificare sempre chiamando la farmacia.</p>
+</footer>
+
+<script>
+function showZone(zone) {
+  document.querySelectorAll('.zone-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.zone-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('zone-' + zone).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>

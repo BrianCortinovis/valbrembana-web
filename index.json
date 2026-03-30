@@ -1,0 +1,109 @@
+{
+  "name": "Demo Valbrembana",
+  "slug": "demo-valbrembana",
+  "savedAt": "2026-03-25T23:54:52.314Z",
+  "nodes": [
+    {
+      "order": 1,
+      "id": "n0",
+      "label": "Inputs",
+      "type": "inputs",
+      "status": "completato",
+      "outputFile": "output/01-inputs.md"
+    },
+    {
+      "order": 2,
+      "id": "n1",
+      "label": "Scraping Sito",
+      "type": "source",
+      "status": "completato",
+      "outputFile": "output/02-scraping-sito.md"
+    },
+    {
+      "order": 3,
+      "id": "n2",
+      "label": "Voiceover TG",
+      "type": "automation",
+      "status": "completato",
+      "outputFile": "output/03-voiceover-tg.md"
+    },
+    {
+      "order": 4,
+      "id": "n3",
+      "label": "Genera Sito Demo",
+      "type": "execution",
+      "status": "completato",
+      "outputFile": "output/04-genera-sito-demo.md"
+    },
+    {
+      "order": 5,
+      "id": "n4",
+      "label": "Verifica e Apertura",
+      "type": "output",
+      "status": "completato",
+      "outputFile": "output/05-verifica-e-apertura.md"
+    }
+  ],
+  "edges": [
+    {
+      "source": "n0",
+      "target": "n1",
+      "label": "config"
+    },
+    {
+      "source": "n0",
+      "target": "n1",
+      "label": "config"
+    },
+    {
+      "source": "n1",
+      "target": "n2",
+      "label": "notizie selezionate"
+    },
+    {
+      "source": "n0",
+      "target": "n1",
+      "label": "config"
+    },
+    {
+      "source": "n1",
+      "target": "n2",
+      "label": "notizie selezionate"
+    },
+    {
+      "source": "n1",
+      "target": "n3",
+      "label": "contenuto + immagini"
+    },
+    {
+      "source": "n2",
+      "target": "n3",
+      "label": "audio voiceover TG"
+    },
+    {
+      "source": "n0",
+      "target": "n1",
+      "label": "config"
+    },
+    {
+      "source": "n1",
+      "target": "n2",
+      "label": "notizie selezionate"
+    },
+    {
+      "source": "n1",
+      "target": "n3",
+      "label": "contenuto + immagini"
+    },
+    {
+      "source": "n2",
+      "target": "n3",
+      "label": "audio voiceover TG"
+    },
+    {
+      "source": "n3",
+      "target": "n4",
+      "label": "demo completata"
+    }
+  ]
+}

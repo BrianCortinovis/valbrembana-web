@@ -1,0 +1,13 @@
+.DS_Store
+.vercel
+node_modules
+*.log
+
+# Content media (managed by CMS, not in repo)
+assets/news-*
+images/news-*
+images/featured-*
+images/tg-news*
+images/tg-lower*
+audio/
+tg_video.mp4

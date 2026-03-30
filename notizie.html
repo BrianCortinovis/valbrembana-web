@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notizie – Val Brembana Web</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --red: #c0392b; --dark: #111; --mid: #333; --light: #f4f4f4; --white: #fff; --border: #ddd; --text: #1a1a1a; --text2: #555; --muted: #666; --max: 1280px; }
+  body { font-family: 'Georgia', 'Times New Roman', serif; background: #f0ede8; color: var(--text); }
+  a { text-decoration: none; color: inherit; }
+  img { display: block; max-width: 100%; }
+
+  /* HEADER — same as homepage */
+  .site-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; padding: 12px 24px; background: var(--dark);
+    border-bottom: 3px solid var(--red);
+  }
+  .site-header .banner-slot { flex: 1; max-width: 320px; }
+  .site-header .banner-slot img { width: 100%; height: 90px; object-fit: cover; border-radius: 4px; }
+  .site-header .logo-center { flex: 2; text-align: center; }
+  .site-header .logo-center img { max-height: 70px; margin: 0 auto 4px; }
+  .site-header .logo-center .site-title {
+    font-family: 'Roboto', Arial, sans-serif; font-size: 2rem; font-weight: 900;
+    letter-spacing: 2px; color: var(--white); text-transform: uppercase;
+  }
+  .site-header .logo-center .site-tagline { font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* TOPBAR — same as homepage */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(17,17,17,0.92); backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--red);
+  }
+  .topbar nav {
+    max-width: var(--max); margin: 0 auto;
+    display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  }
+  .topbar nav a {
+    display: block; color: #eee; font-size: 0.82rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px; padding: 13px 18px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .topbar nav a:hover, .topbar nav a.active { background: var(--red); color: var(--white); }
+  .topbar nav a.search-toggle { display: flex; align-items: center; padding: 13px 14px; }
+  .topbar nav a.search-toggle svg { opacity: 0.7; }
+  .topbar nav a.search-toggle:hover svg { opacity: 1; }
+
+  .page-header {
+    background: #111; padding: 40px 20px 28px; text-align: center;
+    border-bottom: 3px solid var(--red);
+  }
+  .page-header h1 { color: #fff; font-size: 32px; font-weight: bold; }
+  .page-header p { color: #888; font-family: Arial, sans-serif; font-size: 13px; margin-top: 6px; text-transform: uppercase; letter-spacing: 2px; }
+
+  @media (max-width: 1024px) {
+    .site-header .banner-slot { display: none; }
+    .topbar nav a { padding: 10px 12px; font-size: 0.75rem; }
+  }
+  @media (max-width: 640px) {
+    .site-header { flex-direction: column; padding: 10px 16px; }
+    .site-header .logo-center .site-title { font-size: 1.3rem; }
+    .topbar nav a { padding: 8px 10px; font-size: 0.7rem; }
+  }
+
+  .main { max-width: 1200px; margin: 0 auto; padding: 28px 20px; }
+
+  /* Featured 2-col */
+  .featured-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px;
+    padding-bottom: 28px; border-bottom: 2px solid #111;
+  }
+  .feat-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 3px;
+    overflow: hidden; cursor: pointer; transition: box-shadow 0.2s;
+  }
+  .feat-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+  .feat-card img { width: 100%; height: 200px; object-fit: cover; display: block; }
+  .feat-card .fc-body { padding: 16px; }
+  .feat-card .cat { font-family: Arial, sans-serif; font-size: 11px; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .feat-card h2 { font-size: 20px; line-height: 1.35; margin-bottom: 8px; font-weight: bold; }
+  .feat-card p { font-family: Arial, sans-serif; font-size: 14px; color: var(--text2); line-height: 1.6; }
+  .feat-card .meta { font-family: Arial, sans-serif; font-size: 12px; color: #888; margin-top: 10px; }
+
+  /* Category filter */
+  .cat-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+  .cat-btn {
+    background: #fff; border: 1px solid var(--border); padding: 6px 14px;
+    font-family: Arial, sans-serif; font-size: 12px; font-weight: 600;
+    cursor: pointer; border-radius: 2px; transition: all 0.2s;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .cat-btn:hover, .cat-btn.active { background: var(--red); color: #fff; border-color: var(--red); }
+
+  /* News list 3-col */
+  .news-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;
+  }
+  .news-card {
+    background: #fff; border: 1px solid var(--border); border-radius: 3px;
+    overflow: hidden; cursor: pointer; transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .news-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
+  .news-card img { width: 100%; height: 150px; object-fit: cover; display: block; }
+  .news-card .nc-body { padding: 12px 14px; }
+  .news-card .cat { font-family: Arial, sans-serif; font-size: 10px; font-weight: 700; color: var(--red); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+  .news-card h3 { font-size: 15px; line-height: 1.4; font-weight: bold; margin-bottom: 6px; }
+  .news-card .excerpt { font-family: Arial, sans-serif; font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .news-card .meta { font-family: Arial, sans-serif; font-size: 11px; color: #888; margin-top: 8px; border-top: 1px solid #eee; padding-top: 8px; }
+
+  /* Section title */
+  .section-title {
+    display: flex; align-items: center; gap: 10px; margin: 24px 0 16px;
+  }
+  .section-title h2 { font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: #ddd; }
+  .section-title .dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; }
+
+  footer { background: #111; color: #888; padding: 20px; text-align: center; margin-top: 40px; font-family: Arial, sans-serif; font-size: 12px; }
+  footer a { color: var(--red); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="banner-slot">
+    <a href="https://www.ezcape.it/?utm_source=valbrembanaweb" target="_blank" rel="noopener">
+      <img src="images/banner-header.png" alt="eZcape.it">
+    </a>
+  </div>
+  <div class="logo-center">
+    <a href="index.html"><img src="images/logo-vbw-def.png" alt="Valbrembana Web logo"></a>
+    <div class="site-title">Valbrembana Web</div>
+    <div class="site-tagline">Il portale della Valle Brembana e delle Orobie</div>
+  </div>
+  <div class="banner-slot">
+    <a href="#"><img src="images/banner-vintage.jpg" alt="Sponsor"></a>
+  </div>
+</header>
+
+<div class="topbar">
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="notizie.html" class="active">Notizie</a>
+    <a href="categoria.html?cat=cronaca">Cronaca</a>
+    <a href="categoria.html?cat=in-evidenza">In Evidenza</a>
+    <a href="categoria.html?cat=sport">Sport</a>
+    <a href="categoria.html?cat=storie-e-personaggi">Storie</a>
+    <a href="categoria.html?cat=eventi">Eventi</a>
+    <a href="farmacie.html">Farmacie</a>
+    <a href="#" class="search-toggle" onclick="event.preventDefault();document.getElementById('search-overlay').style.opacity=document.getElementById('search-overlay').style.opacity==='1'?'0':'1';document.getElementById('search-overlay').style.pointerEvents=document.getElementById('search-overlay').style.pointerEvents==='all'?'none':'all';" aria-label="Cerca">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </a>
+  </nav>
+</div>
+
+<div id="search-overlay" style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);display:flex;flex-direction:column;align-items:center;padding-top:120px;opacity:0;pointer-events:none;transition:opacity 0.25s;" onclick="if(event.target===this){this.style.opacity='0';this.style.pointerEvents='none';}">
+  <div style="display:flex;width:90%;max-width:600px;background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.4);">
+    <input type="text" id="search-input" placeholder="Cerca notizie..." autocomplete="off" style="flex:1;border:none;outline:none;padding:16px 20px;font-size:1rem;">
+    <button onclick="doSearch()" style="border:none;background:#c0392b;color:#fff;padding:0 20px;cursor:pointer;display:flex;align-items:center;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+  </div>
+  <div id="search-results" style="width:90%;max-width:600px;max-height:50vh;overflow-y:auto;margin-top:8px;border-radius:6px;"></div>
+</div>
+
+<div class="page-header">
+  <h1>Notizie dalla Val Brembana</h1>
+  <p>Cronaca · Attualità · Territorio · Cultura · Sport</p>
+</div>
+
+<div class="main">
+
+  <!-- CATEGORIA FILTRI -->
+  <div class="cat-filter">
+    <button class="cat-btn active">Tutte</button>
+    <button class="cat-btn">Cronaca</button>
+    <button class="cat-btn">Territorio</button>
+    <button class="cat-btn">Cultura</button>
+    <button class="cat-btn">Sport</button>
+    <button class="cat-btn">Appuntamenti</button>
+    <button class="cat-btn">Ambiente</button>
+    <button class="cat-btn">Mobilità</button>
+  </div>
+
+  <!-- FEATURED 2 NOTIZIE PRINCIPALI -->
+  <div class="featured-grid">
+    <div class="feat-card" onclick="window.open('https://www.valbrembanaweb.com/redazionale/in-evidenza/san-pellegrino-strada-chiusa-per-il-macigno-via-ai-lavori-di-messa-in-sicurezza/','_blank')">
+      <img src="assets/news-masso.jpg" alt="Macigno San Pellegrino">
+      <div class="fc-body">
+        <div class="cat">Cronaca</div>
+        <h2>San Pellegrino, strada chiusa per il macigno. Via ai lavori di messa in sicurezza</h2>
+        <p>Iniziati giovedì 19 marzo i lavori di pulizia del versante da cui si erano staccati massi. La strada resta chiusa anche a pedoni e ciclisti in attesa della ricognizione completa.</p>
+        <div class="meta">📅 19 marzo 2026 &nbsp;·&nbsp; 👤 Redazione VBW</div>
+      </div>
+    </div>
+    <div class="feat-card" onclick="window.open('https://www.valbrembanaweb.com/redazionale/in-evidenza/tranvia-bergamo-villa-dalme-presentato-il-primo-tram/','_blank')">
+      <img src="assets/news-tram.jpg" alt="Tram Bergamo Villa d'Almè">
+      <div class="fc-body">
+        <div class="cat">Mobilità</div>
+        <h2>Tranvia Bergamo–Villa d'Almè: presentato il primo tram. Prove ad aprile</h2>
+        <p>Al deposito TEB di Ranica presentato ufficialmente il primo convoglio Škoda destinato alla nuova linea T2. All'evento presenti sindaca Carnevali e assessore regionale Lucente.</p>
+        <div class="meta">📅 24 marzo 2026 &nbsp;·&nbsp; 👤 Redazione VBW</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWS GRID 3 COLONNE -->
+  <div class="section-title"><div class="dot"></div><h2>Ultime notizie</h2></div>
+  <div class="news-grid">
+    <div class="news-card" onclick="window.open('https://www.valbrembanaweb.com/redazionale/in-evidenza/giu-le-temperature-previste-raffiche-di-vento-il-26-marzo-seggiovie-chiuse-a-foppolo-carona/','_blank')">
+      <img src="assets/news-foppolo.jpg" alt="Foppolo">
+      <div class="nc-body">
+        <div class="cat">Montagna</div>
+        <h3>Arrivano freddo e vento: il 26 marzo seggiovie chiuse a Foppolo-Carona</h3>
+        <p class="excerpt">Forte perturbazione in arrivo. L'impianto di Valtorta-Bobbio rimane aperto.</p>
+        <div class="meta">25 marzo 2026</div>
+      </div>
+    </div>
+    <div class="news-card" onclick="window.open('https://www.valbrembanaweb.com/redazionale/in-evidenza/piazza-brembana-un-libro-ricorda-il-genio-fotografico-di-eugenio-goglio/','_blank')">
+      <img src="assets/news-goglio.jpg" alt="Goglio">
+      <div class="nc-body">
+        <div class="cat">Cultura</div>
+        <h3>Piazza Brembana: un libro ricorda il "Genio" fotografico di Eugenio Goglio</h3>
+        <p class="excerpt">Una pubblicazione celebra il talento del fotografo che ha immortalato la Val Brembana per decenni.</p>
+        <div class="meta">25 marzo 2026</div>
+      </div>
+    </div>
+    <div class="news-card" onclick="window.open('https://www.valbrembanaweb.com/redazionale/in-evidenza/cultura-brembana-in-lutto-addio-a-bernardino-luiselli-giornalista-segretario-comunale-e-storico/','_blank')">
+      <img src="assets/news-luiselli.jpg" alt="Luiselli">
+      <div class="nc-body">
+        <div class="cat">Cultura</div>
+        <h3>Cultura brembana in lutto: addio a Bernardino Luiselli, giornalista e storico</h3>
+        <p class="excerpt">Figura indimenticabile della cultura brembana. La comunità lo ricorda con grande affetto.</p>
+        <div class="meta">25 marzo 2026</div>
+      </div>
+    </div>
+    <div class="news-card" onclick="window.open('https://www.valbrembanaweb.com/redazionale/in-evidenza/centrale-a-zogno-chiusa-canale-pieno-di-melma-e-rifiuti-san-pellegrino-si-riapra/','_blank')">
+      <img src="assets/news-canali.jpg" alt="Canali Zogno">
+      <div class="nc-body">
+        <div class="cat">Ambiente</div>
+        <h3>Centrale a Zogno chiusa, canale pieno di melma. San Pellegrino: si riapra</h3>
+        <p class="excerpt">Situazione critica per la centrale idroelettrica. Le istituzioni chiedono intervento urgente.</p>
+        <div class="meta">24 marzo 2026</div>
+      </div>
+    </div>
+    <div class="news-card" onclick="window.open('https://www.valbrembanaweb.com/appuntamenti/dossena-27-marzo-festa-del-madunu/','_blank')">
+      <img src="assets/news-madunu.jpg" alt="Madunù">
+      <div class="nc-body">
+        <div class="cat">Appuntamenti</div>
+        <h3>Dossena, 27 marzo: grande festa del Madunù con tradizioni e sapori locali</h3>
+        <p class="excerpt">Una giornata di festa, musica e gastronomia tradizionale nel centro storico di Dossena.</p>
+        <div class="meta">22 marzo 2026</div>
+      </div>
+    </div>
+    <div class="news-card" onclick="window.open('https://www.valbrembanaweb.com/redazionale/in-evidenza/fondi-dalla-regione-per-riqualificare-i-campi-da-calcio-a-san-pellegrino-e-val-brembilla/','_blank')">
+      <img src="assets/news-sanpe.jpg" alt="San Pellegrino">
+      <div class="nc-body">
+        <div class="cat">Sport</div>
+        <h3>Fondi dalla Regione per riqualificare i campi da calcio a San Pellegrino</h3>
+        <p class="excerpt">Approvato il piano di riqualificazione. Nuovi investimenti per lo sport locale.</p>
+        <div class="meta">23 marzo 2026</div>
+      </div>
+    </div>
+    <div class="news-card" onclick="window.open('https://www.valbrembanaweb.com/appuntamenti/dossena-26-marzo-fuochi-dartificio/','_blank')">
+      <img src="assets/news-fuochi.jpg" alt="Fuochi">
+      <div class="nc-body">
+        <div class="cat">Appuntamenti</div>
+        <h3>Dossena, 26 marzo: grande spettacolo pirotecnico per la notte di festa</h3>
+        <p class="excerpt">Fuochi d'artificio illumineranno il cielo di Dossena per l'apertura delle celebrazioni.</p>
+        <div class="meta">22 marzo 2026</div>
+      </div>
+    </div>
+    <div class="news-card">
+      <img src="assets/news-hans.jpg" alt="Sport">
+      <div class="nc-body">
+        <div class="cat">Sport</div>
+        <h3>Valle Brembana: risultati di rilievo nelle competizioni sportive del fine settimana</h3>
+        <p class="excerpt">I giovani atleti brembani si mettono in luce nelle gare regionali di fine stagione invernale.</p>
+        <div class="meta">22 marzo 2026</div>
+      </div>
+    </div>
+    <div class="news-card">
+      <img src="assets/news-martina.jpg" alt="Giovane atleta">
+      <div class="nc-body">
+        <div class="cat">Storie di Valle</div>
+        <h3>Una giovane di Val Brembana eccelle nelle competizioni di sci alpino regionali</h3>
+        <p class="excerpt">Martina si distingue nelle gare regionali portando in alto i colori della Valle Brembana.</p>
+        <div class="meta">15 febbraio 2026</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p><a href="index.html">Val Brembana Web</a> &nbsp;·&nbsp; Portale della Valle Brembana e delle Orobie &nbsp;·&nbsp; © 2026</p>
+</footer>
+
+<script src="cms-config.js"></script>
+<script src="cms-loader.js"></script>
+<script>
+(async function() {
+  var allArticles = await cmsLoadArticles();
+  if (!allArticles || allArticles.length === 0) return; // Mantieni contenuti statici
+
+  // Raccogli categorie uniche dagli articoli
+  var catSet = {};
+  allArticles.forEach(function(a) {
+    if (a.categories && a.categories[0]) {
+      catSet[a.categories[0].slug] = a.categories[0].name;
+    }
+  });
+
+  // --- FILTRI CATEGORIA: rigenera dal CMS ---
+  var catFilter = document.querySelector('.cat-filter');
+  if (catFilter) {
+    var filterHtml = '<button class="cat-btn active" data-cat="all">Tutte</button>';
+    Object.keys(catSet).forEach(function(slug) {
+      filterHtml += '<button class="cat-btn" data-cat="' + slug + '">' + catSet[slug] + '</button>';
+    });
+    catFilter.innerHTML = filterHtml;
+  }
+
+  // Funzione per renderizzare la griglia
+  function renderGrid(articles) {
+    var grid = document.querySelector('.news-grid');
+    if (!grid) return;
+    var html = '';
+    articles.forEach(function(a) {
+      var cat = (a.categories && a.categories[0]) ? a.categories[0].name : '';
+      html += '<a href="articolo.html?slug=' + a.slug + '" class="news-card">'
+        + '<img src="' + (a.cover_image_url || CMS_PLACEHOLDER_IMG) + '" alt="' + a.title.replace(/"/g, '&quot;') + '">'
+        + '<div class="nc-body">'
+        + '<div class="cat">' + cat + '</div>'
+        + '<h3>' + a.title + '</h3>'
+        + '<p class="excerpt">' + (a.summary || '') + '</p>'
+        + '<div class="meta">' + cmsFormatDateShort(a.published_at) + '</div>'
+        + '</div></a>';
+    });
+    grid.innerHTML = html;
+  }
+
+  // --- FEATURED (2 card grandi): primi 2 articoli ---
+  var featGrid = document.querySelector('.featured-grid');
+  if (featGrid && allArticles.length >= 2) {
+    var fHtml = '';
+    allArticles.slice(0, 2).forEach(function(a) {
+      var cat = (a.categories && a.categories[0]) ? a.categories[0].name : '';
+      fHtml += '<a href="articolo.html?slug=' + a.slug + '" class="feat-card">'
+        + '<img src="' + (a.cover_image_url || CMS_PLACEHOLDER_IMG) + '" alt="' + a.title.replace(/"/g, '&quot;') + '">'
+        + '<div class="fc-body">'
+        + '<div class="cat">' + cat + '</div>'
+        + '<h2>' + a.title + '</h2>'
+        + '<p>' + (a.summary || '') + '</p>'
+        + '<div class="meta">' + cmsFormatDate(a.published_at) + '</div>'
+        + '</div></a>';
+    });
+    featGrid.innerHTML = fHtml;
+  }
+
+  // --- NEWS GRID: resto degli articoli ---
+  renderGrid(allArticles.slice(2));
+
+  // --- FILTRO CATEGORIA: click handler ---
+  document.querySelectorAll('.cat-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.cat-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var cat = btn.getAttribute('data-cat');
+      if (cat === 'all') {
+        renderGrid(allArticles.slice(2));
+      } else {
+        var filtered = allArticles.filter(function(a) {
+          return a.categories && a.categories[0] && a.categories[0].slug === cat;
+        });
+        renderGrid(filtered);
+      }
+    });
+  });
+
+  // Check URL param for pre-filtered category
+  var urlCat = new URLSearchParams(location.search).get("cat");
+  if (urlCat) {
+    var catBtn = document.querySelector('.cat-btn[data-cat="' + urlCat + '"]');
+    if (catBtn) catBtn.click();
+  }
+
+  // Search
+  window._cmsArticles = allArticles;
+})();
+
+var _searchTimeout;
+document.getElementById('search-input').addEventListener('input', function() {
+  clearTimeout(_searchTimeout);
+  _searchTimeout = setTimeout(function() { doSearch(); }, 250);
+});
+document.getElementById('search-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') { var o = document.getElementById('search-overlay'); o.style.opacity='0'; o.style.pointerEvents='none'; }
+});
+function doSearch() {
+  var q = document.getElementById('search-input').value.trim().toLowerCase();
+  var results = document.getElementById('search-results');
+  if (!q || q.length < 2) { results.innerHTML = ''; return; }
+  var articles = window._cmsArticles || [];
+  var found = articles.filter(function(a) {
+    return (a.title && a.title.toLowerCase().indexOf(q) >= 0) || (a.summary && a.summary.toLowerCase().indexOf(q) >= 0);
+  }).slice(0, 8);
+  if (found.length === 0) { results.innerHTML = '<div style="padding:20px;text-align:center;background:#fff;border-radius:6px;color:#666;">Nessun risultato</div>'; return; }
+  var html = '';
+  found.forEach(function(a) {
+    var cat = (a.categories && a.categories[0]) ? a.categories[0].name : '';
+    html += '<a href="articolo.html?slug=' + a.slug + '" style="display:flex;gap:12px;padding:12px 16px;background:#fff;border-bottom:1px solid #eee;align-items:center;text-decoration:none;color:#1a1a1a;">'
+      + '<img src="' + (a.cover_image_url || CMS_PLACEHOLDER_IMG) + '" style="width:60px;height:45px;object-fit:cover;border-radius:3px;flex-shrink:0;" alt="">'
+      + '<div><div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#c0392b;">' + cat + '</div>'
+      + '<div style="font-size:13px;font-weight:700;line-height:1.3;">' + a.title + '</div></div></a>';
+  });
+  results.innerHTML = html;
+}
+</script>
+
+</body>
+</html>

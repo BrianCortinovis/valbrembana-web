@@ -1,0 +1,225 @@
+{
+  "site": {
+    "name": "Val Brembana Web",
+    "tagline": "Il portale della Valle Brembana e delle Orobie",
+    "url": "https://www.valbrembanaweb.com",
+    "email": "redazione@valbrembanaweb.com",
+    "social": {
+      "facebook": "Valle.Brembana.Web",
+      "instagram": "valbrembanaweb",
+      "youtube": "https://www.youtube.com/@valbrembanaweb",
+      "tiktok": "valle_brembana_attiva"
+    }
+  },
+  "banners": [
+    {
+      "id": "banner-header",
+      "img": "images/banner-header.png",
+      "link": "https://www.ezcape.it/?utm_source=valbrembanaweb&utm_medium=header",
+      "label": "Banner Header"
+    },
+    {
+      "id": "banner-centrale",
+      "img": "images/banner-centrale.png",
+      "link": "#",
+      "label": "Banner Centrale"
+    },
+    {
+      "id": "banner-vintage",
+      "img": "images/banner-vintage.jpg",
+      "link": "#",
+      "label": "Banner Sponsor"
+    }
+  ],
+  "logo": "images/logo-vbw.png",
+  "news": [
+    {
+      "id": 1,
+      "title": "Arrivano freddo e raffiche di vento: il 26 marzo seggiovie chiuse a Foppolo-Carona",
+      "date": "2026-03-25",
+      "category": "In Evidenza",
+      "excerpt": "Dal 26 marzo e previsto il ritorno del freddo con forti raffiche di vento. Per tale motivo la societa di gestione degli impianti di risalita di Foppolo-Carona ha annunciato la chiusura delle seggiovie. Salvo cambiamenti dovrebbe riaprire il 27 marzo.",
+      "img": "images/news-foppolo.jpg",
+      "url": "https://www.valbrembanaweb.com/redazionale/in-evidenza/giu-le-temperature-previste-raffiche-di-vento-il-26-marzo-seggiovie-chiuse-a-foppolo-carona/"
+    },
+    {
+      "id": 2,
+      "title": "Centrale a Zogno chiusa, canale pieno di melma e rifiuti. San Pellegrino: si riapra",
+      "date": "2026-03-25",
+      "category": "In Evidenza",
+      "excerpt": "Il canale che dalla diga sul Brembo a San Pellegrino porta l acqua alla centrale idroelettrica di Zogno e chiuso dal dicembre 2023, ovvero da quando la stessa centrale e stata fermata per mancata manutenzione. I Comuni chiedono alla Regione di intervenire.",
+      "img": "images/news-canali.jpg",
+      "url": "https://www.valbrembanaweb.com/redazionale/in-evidenza/centrale-a-zogno-chiusa-canale-pieno-di-melma-e-rifiuti-san-pellegrino-si-riapra/"
+    },
+    {
+      "id": 3,
+      "title": "A Trescore Balneario studente accoltella un'insegnante: e grave",
+      "date": "2026-03-25",
+      "category": "Cronaca",
+      "excerpt": "Grave episodio di violenza nella mattinata di oggi mercoledi 25 marzo, a Trescore Balneario, in provincia di Bergamo, dove uno studente ha accoltellato un insegnante all esterno di una scuola media. La docente e stata trasportata in gravi condizioni.",
+      "img": "images/featured-10206.jpg",
+      "url": "https://www.valbrembanaweb.com/cronaca-bergamo-provincia/a-trescore-balneario-studente-accoltella-uninsegnante-fuori-da-scuola-e-grave/"
+    },
+    {
+      "id": 4,
+      "title": "Tranvia Bergamo-Villa d Alme, presentato il primo tram: prove ad aprile",
+      "date": "2026-03-24",
+      "category": "In Evidenza",
+      "excerpt": "Nella mattina del 24 marzo, al deposito TEB di Ranica, si e svolta la presentazione ufficiale del primo tram destinato alla nuova linea tranviaria T2 Bergamo - Villa d Alme. Un momento atteso e simbolico, che segna una tappa fondamentale nel percorso.",
+      "img": "images/news-tram.jpg",
+      "url": "https://www.valbrembanaweb.com/redazionale/in-evidenza/tranvia-bergamo-villa-dalme-presentato-il-primo-tram/"
+    },
+    {
+      "id": 5,
+      "title": "Fondi dalla Regione per riqualificare i campi da calcio a San Pellegrino e Val Brembilla",
+      "date": "2026-03-24",
+      "category": "Sport",
+      "excerpt": "Grazie a un finanziamento di Regione Lombardia saranno riqualificati lo stadio Quarenghi di San Pellegrino e il campo da calcio nei pressi delle scuole medie di Val Brembilla. Il progetto prevede nuove tribune e spogliatoi.",
+      "img": "images/featured-89635.jpg",
+      "url": "https://www.valbrembanaweb.com/redazionale/in-evidenza/fondi-dalla-regione-per-riqualificare-i-campi-da-calcio-a-san-pellegrino-e-val-brembilla/"
+    },
+    {
+      "id": 6,
+      "title": "Cultura brembana in lutto, addio a Luiselli: giornalista, segretario comunale e storico",
+      "date": "2026-03-20",
+      "category": "Cultura",
+      "excerpt": "La cultura della Val Brembana piange la scomparsa di Bernardino Luiselli, figura poliedrica e amata: giornalista, storico locale e per lunghi anni segretario comunale di diversi comuni della valle. Un intellettuale dalla grande memoria storica.",
+      "img": "images/news-luiselli.jpg",
+      "url": "https://www.valbrembanaweb.com/redazionale/in-evidenza/cultura-brembana-in-lutto-addio-a-bernardino-luiselli-giornalista-segretario-comunale-e-storico/"
+    },
+    {
+      "id": 7,
+      "title": "Sacra Spina a San Giovanni Bianco: i fuochi d artificio incantano la folla",
+      "date": "2026-03-23",
+      "category": "Cultura",
+      "excerpt": "Migliaia di persone hanno assistito allo spettacolo dei fuochi d artificio in occasione della festa della Sacra Spina a San Giovanni Bianco. Un evento molto atteso che ha richiamato visitatori da tutta la provincia di Bergamo.",
+      "img": "images/news-fuochi.jpg",
+      "url": "https://www.valbrembanaweb.com/redazionale/in-evidenza/sacra-spina-a-san-giovanni-bianco-tutti-col-naso-allinsu-i-fuochi-dartificio-incantano-video/"
+    },
+    {
+      "id": 8,
+      "title": "Piazza Brembana: un libro ricorda il Genio fotografico di Eugenio Goglio",
+      "date": "2026-03-25",
+      "category": "Cultura",
+      "excerpt": "Sabato 28 marzo, alle 15,30, nella sala polivalente di Piazza Brembana, sara presentato il libro Il Genio. Eugenio Goglio fotografo, pittore, scultore in Val Brembana, edita dal Centro storico culturale della Valle Brembana.",
+      "img": "images/news-lago-braies.png",
+      "url": "https://www.valbrembanaweb.com/redazionale/in-evidenza/piazza-brembana-un-libro-ricorda-il-genio-fotografico-di-eugenio-goglio/"
+    }
+  ],
+  "ticker": [
+    "Foppolo-Carona: CHIUSO il 26 marzo per forte vento",
+    "Piazzatorre: chiuso",
+    "Valtorta-Bobbio: aperto",
+    "Oltre il Colle: pista di fondo aperta",
+    "Dossena, 27 marzo: festa del Madunu",
+    "Dossena, 26 marzo: fuochi d artificio",
+    "Serina, 28 marzo: musica, food e giochi per il Palio",
+    "A Trescore studente accoltella insegnante: e grave",
+    "Tranvia Bergamo-Villa d Alme: presentato il primo tram"
+  ],
+  "youtube_videos": [
+    {
+      "id": "kTSk6vACYzs",
+      "title": "San Giovanni Bianco, la reposizione della Sacra Spina - 22 marzo 2026"
+    },
+    {
+      "id": "kvC1zmSs_ZU",
+      "title": "San Pellegrino, iniziati i lavori alla frana di via Tasso - 18 marzo 2026"
+    },
+    {
+      "id": "_Oc4FQrAZ2Q",
+      "title": "Alme, inaugurata la rinnovata via Olimpia - 14 marzo 2026"
+    },
+    {
+      "id": "svf9XhwVoEI",
+      "title": "Piani dell Avaro, Trofeo Nikolajewka - 8 marzo 2026"
+    },
+    {
+      "id": "0QmYCYMwRU8",
+      "title": "Sanpellegrino, il progetto per l ex albergo Paradiso"
+    },
+    {
+      "id": "HeW6ZkT1Ti8",
+      "title": "San Giovanni Bianco, carnevale 2026"
+    }
+  ],
+  "farmacie_turno": [
+    {
+      "nome": "Farmacia Comunale di San Giovanni Bianco",
+      "indirizzo": "Via Roma, 10 - San Giovanni Bianco",
+      "telefono": "0345 19001",
+      "turno": "Turno festivo - domenica 26 marzo 2026",
+      "orario": "9:00 - 13:00 / 16:00 - 19:00"
+    },
+    {
+      "nome": "Farmacia Pesenti - San Pellegrino Terme",
+      "indirizzo": "Via Libertà, 34 - San Pellegrino Terme",
+      "telefono": "0345 21211",
+      "turno": "Turno notturno - 26-27 marzo 2026",
+      "orario": "Sempre aperta"
+    },
+    {
+      "nome": "Farmacia Brembana - Piazza Brembana",
+      "indirizzo": "Via Roma, 5 - Piazza Brembana",
+      "telefono": "0345 81025",
+      "turno": "Turno festivo - domenica 26 marzo 2026",
+      "orario": "10:00 - 12:30 / 15:30 - 19:30"
+    },
+    {
+      "nome": "Farmacia Cortinovis - Zogno",
+      "indirizzo": "Piazza Roma, 2 - Zogno",
+      "telefono": "0345 91013",
+      "turno": "Turno festivo - domenica 26 marzo 2026",
+      "orario": "9:30 - 12:30"
+    },
+    {
+      "nome": "Farmacia Bonacina - Serina",
+      "indirizzo": "Via Nazionale, 22 - Serina",
+      "telefono": "0345 77007",
+      "turno": "Turno domenicale - 28 marzo 2026",
+      "orario": "9:00 - 12:30"
+    }
+  ],
+  "nav_links": [
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "Notizie",
+      "url": "/category/redazionale/in-evidenza/"
+    },
+    {
+      "label": "Cronaca",
+      "url": "/cronaca-bergamo-provincia/"
+    },
+    {
+      "label": "Sport",
+      "url": "/category/redazionale/sport/"
+    },
+    {
+      "label": "Cultura",
+      "url": "/category/redazionale/cultura/"
+    },
+    {
+      "label": "Turno Farmacie",
+      "url": "/farmacie-di-turno/"
+    },
+    {
+      "label": "Dove Alloggiare",
+      "url": "/category/dove-alloggiare/"
+    },
+    {
+      "label": "Dove Mangiare",
+      "url": "/category/dove-mangiare/"
+    },
+    {
+      "label": "Stazioni Sci",
+      "url": "/stazioni-sciistiche/"
+    },
+    {
+      "label": "Video",
+      "url": "https://www.youtube.com/@valbrembanaweb"
+    }
+  ]
+}
