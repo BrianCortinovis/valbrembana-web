@@ -129,13 +129,21 @@
   }
 
   async function loadCmsBanners(leftCol, rightCol) {
-    if (typeof cmsLoadBannersByPosition !== 'function') return;
-    var sideBanners = await cmsLoadBannersByPosition('sidebar');
-    if (!sideBanners || sideBanners.length === 0) return;
+    if (typeof cmsLoadBanners !== 'function') return;
+    var allBanners = await cmsLoadBanners();
+    if (!allBanners || allBanners.length === 0) return;
 
-    // Split banners: odd index left, even index right
-    var leftBanners = sideBanners.filter(function(_, i) { return i % 2 === 0; });
-    var rightBanners = sideBanners.filter(function(_, i) { return i % 2 !== 0; });
+    // Collect banners per column
+    var sidebarGeneric = allBanners.filter(function(b) { return b.position === 'sidebar'; });
+    var dedicatedLeft = allBanners.filter(function(b) { return b.position === 'sidebar-left'; });
+    var dedicatedRight = allBanners.filter(function(b) { return b.position === 'sidebar-right'; });
+
+    // Auto-split generic sidebar banners
+    var autoLeft = sidebarGeneric.filter(function(_, i) { return i % 2 === 0; });
+    var autoRight = sidebarGeneric.filter(function(_, i) { return i % 2 !== 0; });
+
+    var leftBanners = dedicatedLeft.concat(autoLeft);
+    var rightBanners = dedicatedRight.concat(autoRight);
 
     if (leftBanners.length > 0) {
       leftCol.innerHTML = buildBannerHtml(leftBanners);
