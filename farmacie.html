@@ -6,29 +6,55 @@
 <title>Farmacie di Turno – Val Brembana Web</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --red: #c0392b; --dark: #111; --border: #ddd; --text: #1a1a1a; --text2: #555; --green: #27ae60; }
-  body { font-family: 'Georgia', 'Times New Roman', serif; background: #f0ede8; color: var(--text); }
+  :root { --red: #c0392b; --dark: #111; --mid: #333; --light: #f4f4f4; --white: #fff; --border: #ddd; --text: #1a1a1a; --text2: #555; --muted: #666; --max: 1280px; --green: #27ae60; }
+  body { font-family: 'Open Sans', sans-serif; background: var(--light); color: var(--text); line-height: 1.5; }
+  a { text-decoration: none; color: inherit; }
+  img { display: block; max-width: 100%; }
 
-  .topbar {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-    background: rgba(15,15,15,0.96); backdrop-filter: blur(8px);
-    border-bottom: 2px solid var(--red); padding: 0 2rem;
-    display: flex; align-items: center; justify-content: space-between; height: 52px;
-  }
-  .topbar-logo { height: 28px; }
-  .topbar-nav { display: flex; list-style: none; }
-  .topbar-nav li a {
-    color: #e8e0d8; text-decoration: none; font-family: Arial, sans-serif;
-    font-size: 13px; letter-spacing: 0.5px; padding: 0 14px; line-height: 52px;
-    display: block; text-transform: uppercase; font-weight: 600;
-    transition: color 0.2s; border-right: 1px solid rgba(255,255,255,0.08);
-  }
-  .topbar-nav li a:hover, .topbar-nav li a.active { color: var(--red); }
-
-  .page-header {
-    background: #111; padding: 90px 20px 28px; text-align: center;
+  .site-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; padding: 12px 24px; background: var(--dark);
     border-bottom: 3px solid var(--red);
   }
+  .site-header .banner-slot { flex: 1; max-width: 320px; }
+  .site-header .banner-slot img { width: 100%; height: 90px; object-fit: cover; border-radius: 4px; }
+  .site-header .logo-center { flex: 2; text-align: center; }
+  .site-header .logo-center img { max-height: 70px; margin: 0 auto 4px; }
+  .site-header .logo-center .site-title {
+    font-family: 'Roboto', Arial, sans-serif; font-size: 2rem; font-weight: 900;
+    letter-spacing: 2px; color: var(--white); text-transform: uppercase;
+  }
+  .site-header .logo-center .site-tagline { font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(17,17,17,0.92); backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--red);
+  }
+  .topbar nav {
+    max-width: var(--max); margin: 0 auto;
+    display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  }
+  .topbar nav a {
+    display: block; color: #eee; font-size: 0.82rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px; padding: 13px 18px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .topbar nav a:hover, .topbar nav a.active { background: var(--red); color: var(--white); }
+  .topbar nav a.search-toggle { display: flex; align-items: center; padding: 13px 14px; }
+
+  .topbar-2 { background: #1a1a1a; border-bottom: 1px solid #333; }
+  .topbar-2 nav { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .topbar-2 nav a { display: block; color: #aaa; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 14px; transition: color 0.2s; }
+  .topbar-2 nav a:hover { color: #fff; }
+  .topbar-2 nav a .ext { font-size: 0.6rem; opacity: 0.5; }
+
+  .page-header {
+    background: #111; padding: 40px 20px 28px; text-align: center;
+    border-bottom: 3px solid var(--red);
+  }
+
+  @media (max-width: 1024px) { .site-header .banner-slot { display: none; } .topbar nav a { padding: 10px 12px; font-size: 0.75rem; } .pharmacy-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .site-header { flex-direction: column; padding: 10px 16px; } .site-header .logo-center .site-title { font-size: 1.3rem; } .topbar nav a { padding: 8px 10px; font-size: 0.7rem; } }
   .page-header h1 { color: #fff; font-size: 32px; font-weight: bold; }
   .page-header p { color: #888; font-family: Arial, sans-serif; font-size: 13px; margin-top: 6px; text-transform: uppercase; letter-spacing: 2px; }
 
@@ -121,26 +147,58 @@
   .note-box { background: #fff8f0; border: 1px solid #f0d9b5; border-radius: 3px; padding: 14px 16px; font-family: Arial, sans-serif; font-size: 13px; color: #7a5c2e; margin-top: 20px; }
   .note-box strong { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; color: #5a3c0e; }
 
-  footer { background: #111; color: #888; padding: 20px; text-align: center; margin-top: 40px; font-family: Arial, sans-serif; font-size: 12px; }
-  footer a { color: var(--red); text-decoration: none; }
+  .site-footer { background: #0a0a0a; color: #888; padding: 40px 24px 20px; margin-top: 40px; } .site-footer .footer-inner { max-width: 1280px; margin: 0 auto; } .site-footer .footer-top { display: flex; gap: 40px; flex-wrap: wrap; padding-bottom: 24px; border-bottom: 1px solid #222; margin-bottom: 20px; } .site-footer .footer-col { flex: 1; min-width: 200px; } .site-footer .footer-col h4 { font-family: Roboto, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #c0392b; margin-bottom: 12px; } .site-footer .footer-col p, .site-footer .footer-col a { font-size: 0.78rem; line-height: 1.8; color: #888; text-decoration: none; } .site-footer .footer-col a:hover { color: #fff; } .site-footer .footer-social { display: flex; gap: 12px; margin-top: 8px; } .site-footer .footer-social a { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: #1a1a1a; color: #888; font-size: 0.7rem; font-weight: 700; } .site-footer .footer-social a:hover { background: #c0392b; color: #fff; } .site-footer .footer-logo { max-height: 50px; margin-bottom: 12px; } .site-footer .footer-bottom { text-align: center; font-size: 0.72rem; color: #555; } .site-footer .footer-bottom a { color: #c0392b; text-decoration: none; } @media (max-width: 640px) { .site-footer .footer-top { flex-direction: column; gap: 24px; } }
+  
 </style>
 </head>
 <body>
 
-<header class="topbar">
-  <img src="assets/logo-vbw.png" alt="Val Brembana Web" class="topbar-logo" onerror="this.style.display='none'">
-  <ul class="topbar-nav">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="notizie.html">Notizie</a></li>
-    <li><a href="#">Appuntamenti</a></li>
-    <li><a href="#">Dove Alloggiare</a></li>
-    <li><a href="#">Dove Mangiare</a></li>
-    <li><a href="#">Attività</a></li>
-    <li><a href="farmacie.html" class="active">Farmacie</a></li>
-    <li><a href="#">Meteo</a></li>
-  </ul>
-  <span style="color:#888; font-size:12px; font-family:Arial,sans-serif;">26 marzo 2026</span>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap">
+
+<header class="site-header">
+  <div class="banner-slot">
+    <a href="https://www.ezcape.it/?utm_source=valbrembanaweb" target="_blank" rel="noopener">
+      <img src="/images/banner-header.png" alt="eZcape.it">
+    </a>
+  </div>
+  <div class="logo-center">
+    <a href="/"><img src="/images/logo-vbw-def.png" alt="Valbrembana Web logo"></a>
+    <div class="site-title">Valbrembana Web</div>
+    <div class="site-tagline">Il portale della Valle Brembana e delle Orobie</div>
+  </div>
+  <div class="banner-slot">
+    <a href="#"><img src="/images/banner-vintage.jpg" alt="Sponsor"></a>
+  </div>
 </header>
+
+<div class="topbar">
+  <nav>
+    <a href="/">Home</a>
+    <a href="/redazionale">Notizie</a>
+    <a href="/category/redazionale/cronaca">Cronaca</a>
+    <a href="/category/redazionale/in-evidenza">In Evidenza</a>
+    <a href="/category/redazionale/sport">Sport</a>
+    <a href="/category/redazionale/storie-e-personaggi">Storie</a>
+    <a href="/category/redazionale/eventi">Eventi</a>
+    <a href="/category/redazionale/noter-de-berghem">N&oacute;ter</a>
+    <a href="/category/atalanta-e-dintorni">Atalanta</a>
+    <a href="/category/magazine">Magazine</a>
+  </nav>
+</div>
+<div class="topbar-2">
+  <nav>
+    <a href="/farmacie" class="active" style="color:#fff;">Farmacie</a>
+    <a href="/dove-alloggiare">Dove Alloggiare</a>
+    <a href="/dove-mangiare">Dove Mangiare</a>
+    <a href="/attivita">Attivit&agrave; in Valle</a>
+    <a href="https://www.brembana.info/trekking/" target="_blank">Trekking <span class="ext">&nearr;</span></a>
+    <a href="https://orobiemeteo.com/" target="_blank">Meteo <span class="ext">&nearr;</span></a>
+    <a href="https://www.brembanaski.com/" target="_blank">BrembanaSki <span class="ext">&nearr;</span></a>
+    <a href="https://www.alpini-alta.vallebrembana.org/" target="_blank">Alpini <span class="ext">&nearr;</span></a>
+    <a href="https://www.youtube.com/@valbrembanaweb" target="_blank">YouTube <span class="ext">&nearr;</span></a>
+  </nav>
+</div>
 
 <div class="page-header">
   <h1>Farmacie di Turno</h1>
@@ -434,9 +492,72 @@
 
 </div>
 
-<footer>
-  <p><a href="index.html">Val Brembana Web</a> &nbsp;·&nbsp; Portale della Valle Brembana e delle Orobie &nbsp;·&nbsp; © 2026</p>
-  <p style="margin-top:6px; color:#555;">Dati turni farmacie aggiornati al 26 marzo 2026. Verificare sempre chiamando la farmacia.</p>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-prefooter">
+      <div class="footer-pf-col">
+        <h4><span style="background:var(--red);color:#fff;padding:3px 8px;font-size:11px;letter-spacing:0.5px;">STAZIONI SCIISTICHE</span></h4>
+        <ul class="footer-pf-list">
+          <li><a href="https://www.brembanaski.com/" target="_blank">Foppolo-Carona</a></li>
+          <li><a href="https://www.brembanaski.com/" target="_blank">Valtorta-Piani di Bobbio</a></li>
+          <li><a href="https://www.brembanaski.com/" target="_blank">Piazzatorre</a></li>
+        </ul>
+      </div>
+      <div class="footer-pf-col">
+        <h4><span style="background:#d35400;color:#fff;padding:3px 8px;font-size:11px;letter-spacing:0.5px;">APPUNTAMENTI</span></h4>
+        <ul class="footer-pf-list" id="cms-footer-events">
+          <li><span style="color:#666;font-size:12px;">Appuntamenti dal CMS</span></li>
+        </ul>
+      </div>
+      <div class="footer-pf-col">
+        <h4><span style="background:#1a5276;color:#fff;padding:3px 8px;font-size:11px;letter-spacing:0.5px;">IN EVIDENZA</span></h4>
+        <ul class="footer-pf-list" id="cms-footer-featured">
+          <li><span style="color:#666;font-size:12px;">Articoli in evidenza dal CMS</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-main">
+      <div class="footer-main-left">
+        <img src="/assets/logo-vbw-originale.png" alt="Val Brembana Web" class="footer-logo" onerror="this.style.display='none'">
+        <p>Il portale della Valle Brembana e delle Orobie.<br>Notizie, eventi, sport, cultura e servizi.</p>
+        <p style="margin-top:8px;"><a href="mailto:redazione@valbrembanaweb.com" style="color:var(--red);">redazione@valbrembanaweb.com</a></p>
+      </div>
+      <div class="footer-main-center">
+        <div class="footer-links-row">
+          <a href="/redazionale">Notizie</a>
+          <a href="/category/redazionale/cronaca">Cronaca</a>
+          <a href="/category/redazionale/in-evidenza">In Evidenza</a>
+          <a href="/category/redazionale/sport">Sport</a>
+          <a href="/category/redazionale/eventi">Eventi</a>
+          <a href="/category/redazionale/storie-e-personaggi">Storie</a>
+          <a href="/category/redazionale/noter-de-berghem">N&oacute;ter</a>
+        </div>
+        <div class="footer-links-row" style="margin-top:10px;">
+          <a href="/farmacie">Farmacie</a>
+          <a href="https://orobiemeteo.com/" target="_blank">Meteo</a>
+          <a href="https://www.brembanaski.com/" target="_blank">BrembanaSki</a>
+          <a href="https://www.brembana.info/trekking/" target="_blank">Trekking</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+      <div class="footer-main-right">
+        <p style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#666;margin-bottom:10px;">Seguici</p>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/Valle.Brembana.Web/" target="_blank" title="Facebook">FB</a>
+          <a href="https://www.instagram.com/valbrembanaweb/" target="_blank" title="Instagram">IG</a>
+          <a href="https://www.youtube.com/channel/UCEeBtyPAMci21n7W98VJI2g" target="_blank" title="YouTube">YT</a>
+          <a href="https://www.tiktok.com/@valle_brembana_attiva" target="_blank" title="TikTok">TK</a>
+          <a href="https://twitter.com/valbrembanaweb" target="_blank" title="X">X</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 <strong>Valbrembana Web</strong> &ndash; Il portale della Valle Brembana e delle Orobie &nbsp;|&nbsp;
+      <a href="mailto:redazione@valbrembanaweb.com">redazione@valbrembanaweb.com</a> &nbsp;|&nbsp;
+      <a href="#">Privacy Policy</a> &nbsp;|&nbsp; <a href="#">Cookie Policy</a>
+    </div>
+  </div>
 </footer>
 
 <script>
@@ -448,5 +569,6 @@ function showZone(zone) {
 }
 </script>
 
+<script src="/site-banners.js"></script>
 </body>
 </html>

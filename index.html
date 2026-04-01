@@ -340,24 +340,24 @@
 <header class="site-header">
   <div class="banner-slot">
     <a href="https://www.ezcape.it/?utm_source=valbrembanaweb" target="_blank" rel="noopener">
-      <img src="images/banner-header.png" alt="eZcape.it">
+      <img src="/images/banner-header.png" alt="eZcape.it">
     </a>
   </div>
   <div class="logo-center">
-    <img src="images/logo-vbw-def.png" alt="Valbrembana Web logo">
+    <img src="/images/logo-vbw-def.png" alt="Valbrembana Web logo">
     <div class="site-title">Valbrembana Web</div>
     <div class="site-tagline">Il portale della Valle Brembana e delle Orobie</div>
   </div>
   <div class="banner-slot">
     <a href="#">
-      <img src="images/banner-vintage.jpg" alt="Sponsor">
+      <img src="/images/banner-vintage.jpg" alt="Sponsor">
     </a>
   </div>
 </header>
 
 <div class="topbar">
   <nav>
-    <a href="index.html" class="active">Home</a>
+    <a href="/" class="active">Home</a>
     <a href="/redazionale">Notizie</a>
     <a href="/category/redazionale/cronaca">Cronaca</a>
     <a href="/category/redazionale/in-evidenza">In Evidenza</a>
@@ -374,7 +374,7 @@
 </div>
 <div class="topbar-2">
   <nav>
-    <a href="farmacie.html">Farmacie</a>
+    <a href="/farmacie">Farmacie</a>
     <a href="/dove-alloggiare">Dove Alloggiare</a>
     <a href="/dove-mangiare">Dove Mangiare</a>
     <a href="/attivita">Attivit&agrave; in Valle</a>
@@ -426,7 +426,7 @@
       </div>
     </div>
     <div class="tg-player">
-      <video id="tg-video" autoplay muted loop playsinline><source src="tg_video.mp4" type="video/mp4"></video>
+      <video id="tg-video" autoplay muted loop playsinline><source src="/tg_video.mp4" type="video/mp4"></video>
       <div class="tg-hud">
         <div class="tg-badge">&#9679; LIVE</div>
         <div class="tg-edition" id="tg-time">Edizione delle 13:00</div>
@@ -435,7 +435,7 @@
           <h3 id="tg-headline">Titolo articolo che ruota automaticamente dal CMS &mdash; breaking news e in evidenza</h3>
         </div>
       </div>
-      <audio id="tg-audio" src="audio/tg-full-voiceover.mp3" preload="auto"></audio>
+      <audio id="tg-audio" src="/audio/tg-full-voiceover.mp3" preload="auto"></audio>
     </div>
     <div class="tg-side">
       <div class="side-card" style="background:#1e2a3a;">
@@ -681,7 +681,7 @@
     </div>
     <div class="footer-main">
       <div class="footer-main-left">
-        <img src="assets/logo-vbw-originale.png" alt="Val Brembana Web" class="footer-logo" onerror="this.style.display='none'">
+        <img src="/assets/logo-vbw-originale.png" alt="Val Brembana Web" class="footer-logo" onerror="this.style.display='none'">
         <p>Il portale della Valle Brembana e delle Orobie.<br>Notizie, eventi, sport, cultura e servizi.</p>
         <p style="margin-top:8px;"><a href="mailto:redazione@valbrembanaweb.com" style="color:var(--red);">redazione@valbrembanaweb.com</a></p>
       </div>
@@ -696,7 +696,7 @@
           <a href="/category/redazionale/noter-de-berghem">N&oacute;ter</a>
         </div>
         <div class="footer-links-row" style="margin-top:10px;">
-          <a href="farmacie.html">Farmacie</a>
+          <a href="/farmacie">Farmacie</a>
           <a href="https://orobiemeteo.com/" target="_blank">Meteo</a>
           <a href="https://www.brembanaski.com/" target="_blank">BrembanaSki</a>
           <a href="https://www.brembana.info/trekking/" target="_blank">Trekking</a>
@@ -790,8 +790,8 @@ setInterval(function() { slideMove(1); }, 5000);
 </script>
 
 <!-- CMS Integration -->
-<script src="cms-config.js"></script>
-<script src="cms-loader.js"></script>
+<script src="/cms-config.js"></script>
+<script src="/cms-loader.js"></script>
 <script>
 (async function() {
   var articles = await cmsLoadArticles();
@@ -979,6 +979,6 @@ function doSearch() {
   results.innerHTML = html;
 }
 </script>
-<script src="site-banners.js"></script>
+<script src="/site-banners.js"></script>
 </body>
 </html>

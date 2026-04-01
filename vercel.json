@@ -1,8 +1,17 @@
 {
   "rewrites": [
     { "source": "/articolo/:slug", "destination": "/articolo.html?slug=:slug" },
-    { "source": "/categoria/:cat", "destination": "/categoria.html?cat=:cat" },
-    { "source": "/notizie", "destination": "/notizie.html" }
+    { "source": "/category/redazionale", "destination": "/notizie.html" },
+    { "source": "/category/redazionale/:cat", "destination": "/categoria.html?cat=:cat" },
+    { "source": "/category/:cat", "destination": "/categoria.html?cat=:cat" },
+    { "source": "/notizie", "destination": "/notizie.html" },
+    { "source": "/redazionale", "destination": "/notizie.html" },
+    { "source": "/dove-alloggiare", "destination": "/dove-alloggiare.html" },
+    { "source": "/dove-mangiare", "destination": "/dove-mangiare.html" },
+    { "source": "/attivita", "destination": "/attivita.html" },
+    { "source": "/commercio", "destination": "/attivita.html" },
+    { "source": "/farmacie", "destination": "/farmacie.html" },
+    { "source": "/search", "destination": "/search.html" }
   ],
   "headers": [
     {

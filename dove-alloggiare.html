@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dove Alloggiare – Val Brembana Web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --red: #c0392b; --dark: #111; --mid: #333; --light: #f4f4f4; --white: #fff; --border: #ddd; --text: #1a1a1a; --text2: #555; --muted: #666; --max: 1280px; --blue: #2980b9; }
+  body { font-family: 'Open Sans', sans-serif; background: var(--light); color: var(--text); line-height: 1.5; }
+  a { text-decoration: none; color: inherit; }
+  img { display: block; max-width: 100%; }
+
+  .site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 24px; background: var(--dark); border-bottom: 3px solid var(--red); }
+  .site-header .banner-slot { flex: 1; max-width: 320px; }
+  .site-header .banner-slot img { width: 100%; height: 90px; object-fit: cover; border-radius: 4px; }
+  .site-header .logo-center { flex: 2; text-align: center; }
+  .site-header .logo-center img { max-height: 70px; margin: 0 auto 4px; }
+  .site-header .logo-center .site-title { font-family: 'Roboto', sans-serif; font-size: 2rem; font-weight: 900; letter-spacing: 2px; color: var(--white); text-transform: uppercase; }
+  .site-header .logo-center .site-tagline { font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+  .topbar { position: sticky; top: 0; z-index: 100; background: rgba(17,17,17,0.92); backdrop-filter: blur(8px); border-bottom: 2px solid var(--red); }
+  .topbar nav { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .topbar nav a { display: block; color: #eee; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 13px 18px; transition: background 0.2s, color 0.2s; }
+  .topbar nav a:hover, .topbar nav a.active { background: var(--red); color: var(--white); }
+  .topbar-2 { background: #1a1a1a; border-bottom: 1px solid #333; }
+  .topbar-2 nav { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .topbar-2 nav a { display: block; color: #aaa; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 14px; transition: color 0.2s; }
+  .topbar-2 nav a:hover { color: #fff; }
+  .topbar-2 nav a.active { color: #fff; }
+
+  /* HERO BOOKING */
+  .booking-hero { background: linear-gradient(135deg, #1a3a5c, #0d2137); padding: 48px 24px 36px; text-align: center; }
+  .booking-hero h1 { color: #fff; font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .booking-hero p { color: #8ab4d6; font-size: 14px; }
+
+  /* FILTER TABS */
+  .filter-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 20px 24px; background: var(--white); border-bottom: 1px solid var(--border); }
+  .filter-tab { padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); color: var(--text2); cursor: pointer; transition: all 0.15s; background: var(--white); text-transform: uppercase; letter-spacing: 0.3px; }
+  .filter-tab:hover { border-color: var(--blue); color: var(--blue); }
+  .filter-tab.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+  /* LISTING CARDS */
+  .main { max-width: var(--max); margin: 0 auto; padding: 24px 20px; }
+  .listing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .listing-card { background: var(--white); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: box-shadow 0.2s, transform 0.15s; }
+  .listing-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.1); transform: translateY(-2px); }
+  .listing-card .card-img { width: 100%; height: 180px; background: #e0e0e0; position: relative; }
+  .listing-card .card-badge { position: absolute; top: 10px; left: 10px; background: var(--blue); color: #fff; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .listing-card .card-body { padding: 16px; }
+  .listing-card .card-type { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--blue); letter-spacing: 0.5px; margin-bottom: 4px; }
+  .listing-card h3 { font-size: 16px; font-weight: 700; line-height: 1.3; margin-bottom: 6px; }
+  .listing-card .card-location { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .listing-card .card-desc { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 12px; }
+  .listing-card .card-cta { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; background: var(--blue); color: #fff; transition: background 0.15s; }
+  .listing-card .card-cta:hover { background: #2471a3; }
+  .listing-card .card-contact { display: flex; gap: 12px; margin-top: 8px; font-size: 11px; color: var(--muted); }
+
+  .section-title { display: flex; align-items: center; gap: 10px; margin: 28px 0 16px; }
+  .section-title h2 { font-family: 'Roboto', sans-serif; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+  .section-title .dot { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; flex-shrink: 0; }
+  .section-title .line { flex: 1; height: 1px; background: var(--border); }
+
+  .site-footer { background: #0a0a0a; color: #888; } .site-footer a { text-decoration: none; color: #888; } .site-footer a:hover { color: #fff; } .site-footer .footer-inner { max-width: var(--max); margin: 0 auto; } .site-footer .footer-prefooter { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid #1a1a1a; } .site-footer .footer-pf-col { padding: 24px 20px; border-right: 1px solid #1a1a1a; } .site-footer .footer-pf-col:last-child { border-right: none; } .site-footer .footer-pf-col h4 { margin-bottom: 12px; } .site-footer .footer-pf-list { list-style: none; padding: 0; margin: 0; } .site-footer .footer-pf-list li { padding: 5px 0; border-bottom: 1px solid #151515; font-size: 0.78rem; } .site-footer .footer-pf-list li:last-child { border-bottom: none; } .site-footer .footer-pf-list li a { color: #bbb; } .site-footer .footer-main { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 24px; padding: 28px 20px; border-bottom: 1px solid #1a1a1a; } .site-footer .footer-logo { max-height: 45px; margin-bottom: 10px; filter: brightness(0.7); } .site-footer .footer-main p { font-size: 0.75rem; line-height: 1.6; } .site-footer .footer-links-row { display: flex; flex-wrap: wrap; gap: 6px 16px; } .site-footer .footer-links-row a { font-size: 0.75rem; color: #999; } .site-footer .footer-social { display: flex; gap: 10px; } .site-footer .footer-social a { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: #1a1a1a; color: #888; font-size: 0.7rem; font-weight: 700; } .site-footer .footer-social a:hover { background: var(--red); color: #fff; } .site-footer .footer-bottom { text-align: center; padding: 16px 20px; font-size: 0.7rem; color: #555; } .site-footer .footer-bottom a { color: var(--red); }
+
+  @media (max-width: 1024px) { .site-header .banner-slot { display: none; } .listing-grid { grid-template-columns: 1fr 1fr; } .site-footer .footer-prefooter { grid-template-columns: 1fr; } .site-footer .footer-main { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .site-header { flex-direction: column; padding: 10px 16px; } .listing-grid { grid-template-columns: 1fr; } .topbar nav a { padding: 8px 10px; font-size: 0.7rem; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="banner-slot"><a href="#"><img src="/images/banner-header.png" alt="Sponsor"></a></div>
+  <div class="logo-center"><a href="/"><img src="/images/logo-vbw-def.png" alt="Valbrembana Web"></a><div class="site-title">Valbrembana Web</div><div class="site-tagline">Il portale della Valle Brembana e delle Orobie</div></div>
+  <div class="banner-slot"><a href="#"><img src="/images/banner-vintage.jpg" alt="Sponsor"></a></div>
+</header>
+<div class="topbar"><nav>
+  <a href="/">Home</a><a href="/redazionale">Notizie</a><a href="/category/redazionale/cronaca">Cronaca</a><a href="/category/redazionale/in-evidenza">In Evidenza</a><a href="/category/redazionale/sport">Sport</a><a href="/category/redazionale/storie-e-personaggi">Storie</a><a href="/category/redazionale/eventi">Eventi</a><a href="/category/redazionale/noter-de-berghem">N&oacute;ter</a><a href="/category/atalanta-e-dintorni">Atalanta</a><a href="/category/magazine">Magazine</a>
+</nav></div>
+<div class="topbar-2"><nav>
+  <a href="/farmacie">Farmacie</a><a href="/dove-alloggiare" class="active" style="color:#fff;">Dove Alloggiare</a><a href="/dove-mangiare">Dove Mangiare</a><a href="#">Attivit&agrave;</a><a href="https://www.brembana.info/trekking/" target="_blank">Trekking</a><a href="https://orobiemeteo.com/" target="_blank">Meteo</a><a href="https://www.brembanaski.com/" target="_blank">BrembanaSki</a>
+</nav></div>
+
+<!-- HERO -->
+<div class="booking-hero">
+  <h1>Dove Alloggiare in Val Brembana</h1>
+  <p>Hotel, B&amp;B, Agriturismi, Rifugi, Case Vacanza e Camping nella valle e sulle Orobie</p>
+</div>
+
+<!-- FILTER TABS -->
+<div class="filter-tabs">
+  <span class="filter-tab active">Tutti</span>
+  <span class="filter-tab">Hotel</span>
+  <span class="filter-tab">B&amp;B</span>
+  <span class="filter-tab">Agriturismo</span>
+  <span class="filter-tab">Rifugi</span>
+  <span class="filter-tab">Case Vacanza</span>
+  <span class="filter-tab">Camping</span>
+</div>
+
+<div class="main">
+  <!-- STRUTTURE IN EVIDENZA -->
+  <div class="section-title"><div class="dot"></div><h2>Strutture in Evidenza</h2><div class="line"></div></div>
+  <div class="listing-grid">
+    <div class="listing-card">
+      <div class="card-img"><div class="card-badge">Hotel</div></div>
+      <div class="card-body">
+        <div class="card-type">Hotel / Albergo</div>
+        <h3>Nome Struttura 1 &mdash; Hotel con vista sulle Orobie</h3>
+        <div class="card-location">&#128205; San Pellegrino Terme</div>
+        <div class="card-desc">Descrizione breve della struttura con servizi principali, posizione e punti di forza...</div>
+        <div class="card-cta">&#9742; Contatta la struttura</div>
+        <div class="card-contact"><span>Tel: 035 XXXXXX</span><span>Email: info@hotel.it</span></div>
+      </div>
+    </div>
+    <div class="listing-card">
+      <div class="card-img" style="background:#d5dde8;"><div class="card-badge" style="background:#27ae60;">Agriturismo</div></div>
+      <div class="card-body">
+        <div class="card-type" style="color:#27ae60;">Agriturismo</div>
+        <h3>Nome Struttura 2 &mdash; Agriturismo tra i boschi</h3>
+        <div class="card-location">&#128205; Branzi</div>
+        <div class="card-desc">Ambiente familiare con cucina tipica bergamasca, animali e percorsi natura...</div>
+        <div class="card-cta" style="background:#27ae60;">&#9742; Contatta la struttura</div>
+        <div class="card-contact"><span>Tel: 035 XXXXXX</span></div>
+      </div>
+    </div>
+    <div class="listing-card">
+      <div class="card-img" style="background:#ddd5c8;"><div class="card-badge" style="background:#e67e22;">Rifugio</div></div>
+      <div class="card-body">
+        <div class="card-type" style="color:#e67e22;">Rifugio</div>
+        <h3>Nome Struttura 3 &mdash; Rifugio in quota a 2000m</h3>
+        <div class="card-location">&#128205; Piani dell&rsquo;Avaro</div>
+        <div class="card-desc">Punto d&rsquo;appoggio per escursionisti con cucina casalinga e dormitorio...</div>
+        <div class="card-cta" style="background:#e67e22;">&#9742; Contatta la struttura</div>
+        <div class="card-contact"><span>Tel: 035 XXXXXX</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TUTTE LE STRUTTURE -->
+  <div class="section-title"><div class="dot"></div><h2>Tutte le Strutture</h2><div class="line"></div></div>
+  <div class="listing-grid">
+    <div class="listing-card"><div class="card-img" style="background:#e0e0e0;"><div class="card-badge">B&amp;B</div></div><div class="card-body"><div class="card-type" style="color:#9b59b6;">B&amp;B</div><h3>Struttura 4 &mdash; B&amp;B accogliente in centro</h3><div class="card-location">&#128205; Zogno</div><div class="card-desc">Posizione strategica per visitare tutta la valle. Colazione inclusa.</div><div class="card-cta">&#9742; Contatta</div></div></div>
+    <div class="listing-card"><div class="card-img" style="background:#dde0e5;"><div class="card-badge" style="background:#1abc9c;">Camping</div></div><div class="card-body"><div class="card-type" style="color:#1abc9c;">Camping</div><h3>Struttura 5 &mdash; Campeggio sul Brembo</h3><div class="card-location">&#128205; Isola di Fondra</div><div class="card-desc">Piazzole e bungalow in riva al fiume. Ideale per famiglie.</div><div class="card-cta" style="background:#1abc9c;">&#9742; Contatta</div></div></div>
+    <div class="listing-card"><div class="card-img" style="background:#d8d8d8;"><div class="card-badge">Hotel</div></div><div class="card-body"><div class="card-type">Hotel</div><h3>Struttura 6 &mdash; Hotel ristorante panoramico</h3><div class="card-location">&#128205; Foppolo</div><div class="card-desc">A pochi passi dagli impianti sciistici. Ristorante con men&ugrave; tipico.</div><div class="card-cta">&#9742; Contatta</div></div></div>
+    <div class="listing-card"><div class="card-img" style="background:#e5e0d8;"><div class="card-badge" style="background:#3498db;">Casa Vacanza</div></div><div class="card-body"><div class="card-type" style="color:#3498db;">Casa Vacanza</div><h3>Struttura 7 &mdash; Appartamento in montagna</h3><div class="card-location">&#128205; Carona</div><div class="card-desc">Appartamento indipendente con vista. Settimana o weekend.</div><div class="card-cta" style="background:#3498db;">&#9742; Contatta</div></div></div>
+    <div class="listing-card"><div class="card-img" style="background:#d5d5d5;"><div class="card-badge" style="background:#27ae60;">Agriturismo</div></div><div class="card-body"><div class="card-type" style="color:#27ae60;">Agriturismo</div><h3>Struttura 8 &mdash; Fattoria didattica e ospitalit&agrave;</h3><div class="card-location">&#128205; Serina</div><div class="card-desc">Esperienza rurale autentica. Animali, orto e cucina a km zero.</div><div class="card-cta" style="background:#27ae60;">&#9742; Contatta</div></div></div>
+    <div class="listing-card"><div class="card-img" style="background:#e0ddd5;"><div class="card-badge" style="background:#e67e22;">Rifugio</div></div><div class="card-body"><div class="card-type" style="color:#e67e22;">Rifugio</div><h3>Struttura 9 &mdash; Rifugio escursionistico</h3><div class="card-location">&#128205; Oltre il Colle</div><div class="card-desc">Tappa ideale per il Sentiero delle Orobie. Mezza pensione.</div><div class="card-cta" style="background:#e67e22;">&#9742; Contatta</div></div></div>
+  </div>
+
+  <div style="text-align:center;padding:32px;font-family:Arial,sans-serif;font-size:12px;color:#999;">
+    <em>Le strutture vengono gestite dal CMS come articoli con categoria "Hotel/Alberghi", "Agriturismo", ecc.<br>
+    Ogni struttura ha: foto, descrizione, posizione, contatto telefonico, email, sito web.</em>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-prefooter">
+      <div class="footer-pf-col"><h4><span style="background:var(--red);color:#fff;padding:3px 8px;font-size:11px;">STAZIONI SCIISTICHE</span></h4><ul class="footer-pf-list"><li><a href="#">Foppolo-Carona</a></li><li><a href="#">Valtorta-Bobbio</a></li><li><a href="#">Piazzatorre</a></li></ul></div>
+      <div class="footer-pf-col"><h4><span style="background:#d35400;color:#fff;padding:3px 8px;font-size:11px;">APPUNTAMENTI</span></h4><ul class="footer-pf-list"><li><span style="color:#666;font-size:12px;">Dal CMS</span></li></ul></div>
+      <div class="footer-pf-col"><h4><span style="background:#1a5276;color:#fff;padding:3px 8px;font-size:11px;">IN EVIDENZA</span></h4><ul class="footer-pf-list"><li><span style="color:#666;font-size:12px;">Dal CMS</span></li></ul></div>
+    </div>
+    <div class="footer-main">
+      <div><img src="/assets/logo-vbw-originale.png" alt="VBW" class="footer-logo" onerror="this.style.display='none'"><p>Il portale della Valle Brembana.</p><p style="margin-top:8px;"><a href="mailto:redazione@valbrembanaweb.com" style="color:var(--red);">redazione@valbrembanaweb.com</a></p></div>
+      <div><div class="footer-links-row"><a href="/redazionale">Notizie</a><a href="/category/redazionale/cronaca">Cronaca</a><a href="/category/redazionale/sport">Sport</a><a href="/category/redazionale/eventi">Eventi</a></div><div class="footer-links-row" style="margin-top:10px;"><a href="/farmacie">Farmacie</a><a href="https://orobiemeteo.com/" target="_blank">Meteo</a><a href="#">Privacy</a></div></div>
+      <div><p style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#666;margin-bottom:10px;">Seguici</p><div class="footer-social"><a href="https://www.facebook.com/Valle.Brembana.Web/" target="_blank">FB</a><a href="https://www.instagram.com/valbrembanaweb/" target="_blank">IG</a><a href="https://www.youtube.com/channel/UCEeBtyPAMci21n7W98VJI2g" target="_blank">YT</a></div></div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 <strong>Valbrembana Web</strong> | <a href="mailto:redazione@valbrembanaweb.com">redazione@valbrembanaweb.com</a> | <a href="#">Privacy</a></div>
+  </div>
+</footer>
+
+<script src="/cms-config.js"></script>
+<script src="/cms-loader.js"></script>
+<script src="/site-banners.js"></script>
+</body>
+</html>
