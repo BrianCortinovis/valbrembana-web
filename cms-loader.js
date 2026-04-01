@@ -21,21 +21,21 @@ async function cmsLoad(resource, slug) {
 async function cmsLoadArticles() {
   var data = await cmsLoad("posts");
   if (!data) return [];
-  return data.articles || data || [];
+  return cmsNormalizeArticles(data.articles || data || []);
 }
 
 /** Carica articolo singolo per slug */
 async function cmsLoadArticle(slug) {
   var data = await cmsLoad("articles", slug);
   if (!data) return null;
-  return data.article || data;
+  return cmsNormalizeArticle(data.article || data);
 }
 
 /** Carica articoli di una categoria */
 async function cmsLoadCategory(categorySlug) {
   var data = await cmsLoad("categories", categorySlug);
   if (!data) return [];
-  return data.articles || data || [];
+  return cmsNormalizeArticles(data.articles || data || []);
 }
 
 /** Carica breaking news */
@@ -187,6 +187,32 @@ async function cmsLoadZoneContent(zoneId) {
     default:
       return [];
   }
+}
+
+/**
+ * Normalize article data from CMS JSON.
+ * - categories: CMS may return object or array — always normalize to array
+ * - author: CMS uses "profiles" field, site expects "author"
+ */
+function cmsNormalizeArticle(a) {
+  if (!a) return a;
+  // Normalize categories to array
+  if (a.all_categories && Array.isArray(a.all_categories)) {
+    a.categories = a.all_categories;
+  } else if (a.categories && !Array.isArray(a.categories)) {
+    a.categories = [a.categories];
+  } else if (!a.categories) {
+    a.categories = [];
+  }
+  // Normalize author
+  if (!a.author && a.profiles) {
+    a.author = a.profiles;
+  }
+  return a;
+}
+
+function cmsNormalizeArticles(articles) {
+  return (articles || []).map(cmsNormalizeArticle);
 }
 
 /** Placeholder image */
