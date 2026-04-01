@@ -130,13 +130,18 @@
 
   async function loadCmsBanners(leftCol, rightCol) {
     if (typeof cmsLoadBannersByPosition !== 'function') return;
-    var leftBanners = await cmsLoadBannersByPosition('sidebar-left');
-    var rightBanners = await cmsLoadBannersByPosition('sidebar-right');
-    if (leftBanners && leftBanners.length > 0) {
+    var sideBanners = await cmsLoadBannersByPosition('sidebar');
+    if (!sideBanners || sideBanners.length === 0) return;
+
+    // Split banners: odd index left, even index right
+    var leftBanners = sideBanners.filter(function(_, i) { return i % 2 === 0; });
+    var rightBanners = sideBanners.filter(function(_, i) { return i % 2 !== 0; });
+
+    if (leftBanners.length > 0) {
       leftCol.innerHTML = buildBannerHtml(leftBanners);
       startScroll(leftCol.querySelector('.sb-track'), 1);
     }
-    if (rightBanners && rightBanners.length > 0) {
+    if (rightBanners.length > 0) {
       rightCol.innerHTML = buildBannerHtml(rightBanners);
       startScroll(rightCol.querySelector('.sb-track'), -1);
     }
